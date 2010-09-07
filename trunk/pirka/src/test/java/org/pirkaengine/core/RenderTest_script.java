@@ -12,7 +12,7 @@ public class RenderTest_script extends RenderTest {
     
     @Test
     public void render_prkDefGroovy_getFileType() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
-        String templateName = "prkDefGroovy_getFileType";
+        String templateName = "PrkDefGroovy_getFileType";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         viewModel.put("name", "Sample.doc");
         String actual = tmpl.generate(viewModel).render();
@@ -21,7 +21,7 @@ public class RenderTest_script extends RenderTest {
 
     @Test
     public void render_prkDefJavaScript_average() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
-        String templateName = "prkDefJavaScript_average";
+        String templateName = "PrkDefJavaScript_average";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         Integer[] scores = {10, 8, 9, 10, 8};
         viewModel.put("scores", scores);
@@ -31,7 +31,7 @@ public class RenderTest_script extends RenderTest {
     
     @Test
     public void render_prkDefGroovy_trim() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
-        String templateName = "prkDefGroovy_trim";
+        String templateName = "PrkDefGroovy_trim";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         viewModel.put("text1", "あいうえおかきくけ");
         viewModel.put("text2", "あいうえおかきくけこ");
@@ -42,7 +42,7 @@ public class RenderTest_script extends RenderTest {
 
     @Test
     public void render_prkDefRuby_format() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
-        String templateName = "prkDefRuby_format";
+        String templateName = "PrkDefRuby_format";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         viewModel.put("price", 1234567890);
         String actual = tmpl.generate(viewModel).render();
