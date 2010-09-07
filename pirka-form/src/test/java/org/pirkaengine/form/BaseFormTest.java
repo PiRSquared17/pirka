@@ -2,11 +2,7 @@ package org.pirkaengine.form;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.pirkaengine.form.BaseForm;
-import org.pirkaengine.form.Label;
-import org.pirkaengine.form.Required;
 import org.pirkaengine.form.field.DateField;
 import org.pirkaengine.form.field.SelectEnumField;
 import org.pirkaengine.form.field.TextField;
@@ -35,6 +31,7 @@ public class BaseFormTest {
         
         public String notField;
         
+        @SuppressWarnings("unused")
         private TextField priveteField;
         
         @Override
