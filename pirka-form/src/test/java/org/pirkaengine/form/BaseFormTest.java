@@ -1,39 +1,68 @@
 package org.pirkaengine.form;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.pirkaengine.form.annotation.Label;
+import org.pirkaengine.form.annotation.Required;
 import org.pirkaengine.form.field.DateField;
 import org.pirkaengine.form.field.SelectEnumField;
 import org.pirkaengine.form.field.TextField;
 
 public class BaseFormTest {
 
-    public static enum Options {
-        A, B;
+    public static class TextFieldForm extends MyForm {
+        public TextField text = new TextField();
     }
 
-    public static class Entity {
-
+    @Test
+    public void newForm_TextField() {
+        TextFieldForm form = TextFieldForm.newForm(TextFieldForm.class);
+        assertThat(form.text.name, is("text"));
+        assertThat(form.text.label, is("text"));
+        assertThat(form.text.isRequired(), is(false));
     }
 
-    public static class MyForm extends BaseForm<Entity> {
+    public static class RequiredTextFieldForm extends MyForm {
+        @Label("Name")
+        @Required
+        public TextField text = new TextField();
+    }
 
-        public TextField field1 = new TextField();
+    @Test
+    public void newForm_TextField_required() {
+        RequiredTextFieldForm form = RequiredTextFieldForm.newForm(RequiredTextFieldForm.class);
+        assertThat(form.text.name, is("text"));
+        assertThat(form.text.label, is("Name"));
+        assertThat(form.text.isRequired(), is(true));
+    }
 
-        @Label("フィールド２")
-        @Required(true)
-        public TextField field2 = new TextField();
+    public static class DateFieldForm extends MyForm {
+        public DateField date = new DateField();
+    }
 
-        public DateField field3 = new DateField();
+    @Test
+    public void newForm_DateField() {
+        DateFieldForm form = DateFieldForm.newForm(DateFieldForm.class);
+        assertEquals("date", form.date.name);
+        assertEquals("date", form.date.label);
+        assertEquals(false, form.date.isRequired());
+    }
 
-        public SelectEnumField<Options> field4 = new SelectEnumField<Options>(Options.class, Options.values());
-        
-        public String notField;
-        
-        @SuppressWarnings("unused")
-        private TextField priveteField;
-        
+    public static class SelectEnumFieldForm extends MyForm {
+        public SelectEnumField<Options> options = new SelectEnumField<Options>(Options.class, Options.values());
+    }
+
+    @Test
+    public void newForm_SelectEnumField() {
+        SelectEnumFieldForm form = SelectEnumFieldForm.newForm(SelectEnumFieldForm.class);
+        assertEquals("options", form.options.name);
+        assertEquals("options", form.options.label);
+        assertEquals(false, form.options.isRequired());
+    }
+
+    public static abstract class MyForm extends BaseForm<Entity> {
         @Override
         public void fill(Entity entity) {
         }
@@ -41,47 +70,12 @@ public class BaseFormTest {
         @Override
         public void setupEntity(Entity entity) {
         }
-
     }
 
-    MyForm target;
-
-    @Test
-    public void newForm_fields() {
-        MyForm form = MyForm.newForm(MyForm.class);
-        assertEquals(4, form.fields.size());
+    public static enum Options {
+        A, B;
     }
 
-    @Test
-    public void newForm_field1() {
-        MyForm form = MyForm.newForm(MyForm.class);
-        assertEquals("field1", form.field1.name);
-        assertEquals("field1", form.field1.label);
-        assertEquals(false, form.field1.isRequired());
+    public static class Entity {
     }
-
-    @Test
-    public void newForm_field2() {
-        MyForm form = MyForm.newForm(MyForm.class);
-        assertEquals("field2", form.field2.name);
-        assertEquals("フィールド２", form.field2.label);
-        assertEquals(true, form.field2.isRequired());
-    }
-
-    @Test
-    public void newForm_field3() {
-        MyForm form = MyForm.newForm(MyForm.class);
-        assertEquals("field3", form.field3.name);
-        assertEquals("field3", form.field3.label);
-        assertEquals(false, form.field3.isRequired());
-    }
-
-    @Test
-    public void newForm_field4() {
-        MyForm form = MyForm.newForm(MyForm.class);
-        assertEquals("field4", form.field4.name);
-        assertEquals("field4", form.field4.label);
-        assertEquals(false, form.field4.isRequired());
-    }
-
 }

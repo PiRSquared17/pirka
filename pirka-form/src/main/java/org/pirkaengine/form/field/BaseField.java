@@ -1,7 +1,13 @@
 package org.pirkaengine.form.field;
 
-import java.util.ArrayList;
+import java.lang.annotation.Annotation;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.annotation.Label;
+import org.pirkaengine.form.annotation.Required;
+import org.pirkaengine.form.validator.Validator;
 
 /**
  * フィールドの基底クラス.
@@ -13,45 +19,82 @@ import java.util.List;
 public abstract class BaseField<T> {
     /** フォールド名 */
     public String name;
+    /** 値 */
+    T value;
+    /** 入力文字列 */
+    String rawText = "";
     /** ラベル */
     public String label;
     /** エラーメッセージ */
-    public final List<String> errors = new ArrayList<String>();
-    String rawText = "";
-    T value;
+    public final List<String> errors = new LinkedList<String>();
+    /** 必須の場合true */
     boolean required;
+    /** Validators */
+    protected final List<Validator<T>> validators = new LinkedList<Validator<T>>();
+
+    public void apply(String name, Annotation... annos) {
+        this.name = name;
+        this.label = name;
+        for (Annotation anno : annos) {
+            Class<?> type = anno.annotationType();
+            if (type == Required.class) {
+                this.setRequired(true);
+            } else if (type == Label.class) {
+                String label = ((Label) anno).value();
+                if (label != null && !label.isEmpty()) this.label = label;
+            } else {
+                apply(anno);
+            }
+        }
+    }
+    
+    protected void apply(Annotation anno) {
+    }
 
     /**
      * テキストをクリーニングし、型変換を行う。
      * <p>
-     * 妥当性チェックも行う。
+     * 必須チェック、型変換、妥当性チェックを行う。
      * </p>
-     * 
      * @return 型変換が成功した場合true
      */
     public boolean clean() {
+        if (isRequired() && isEmptyValue()) {
+            // TODO メッセージ
+            errors.add(label + "は必須項目です。");
+            return !hasError();
+        }
         try {
-            if (required && isEmptyValue()) {
-                // TODO メッセージ
-                errors.add(label + "を入力してください。");
-                return false;
-            }
             this.value = convert(rawText);
-            return true;
-        } catch (Exception e) {
+        } catch (ConvertException e) {
             // TODO メッセージ
             errors.add(label + "を正しいフォーマットで入力してください。");
-            return false;
         }
+        validate(this.value);
+        return !hasError();
     }
 
-    boolean isEmptyValue() {
+    /**
+     * 入力文字列が空文字の場合にtrueを返す
+     * @return rawTextがnullまたは空文字列の場合にtrue
+     */
+    protected boolean isEmptyValue() {
         return this.rawText == null || this.rawText.isEmpty();
     }
 
-    abstract protected T convert(String text);
+    protected void validate(T value) {
+        for (Validator<T> v : validators) {
+            if (!v.isValid(this.value)) this.errors.add("");
+        }
+    }
+
+    abstract protected T convert(String text) throws ConvertException;
 
     abstract protected String toString(T value);
+
+    protected String createErrorMessage() {
+        return null;
+    }
 
     /**
      * フィールドがエラーを保持する場合にtrueを返す

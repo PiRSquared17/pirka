@@ -25,7 +25,7 @@ public class FloatField extends BaseField<Float> {
     }
 
     @Override
-    protected Float convert(String text) {
+    protected Float convert(String text) throws ConvertException {
         if (text == null || text.isEmpty()) return null;
         try {
             return Float.parseFloat(text);

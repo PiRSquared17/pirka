@@ -1,10 +1,15 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pirkaengine.form.field.TextField;
+import org.pirkaengine.form.annotation.LabelImpl;
+import org.pirkaengine.form.annotation.RequiredImpl;
+import org.pirkaengine.form.annotation.StartWithImpl;
+import org.pirkaengine.form.validator.StartWithValidator;
+import org.pirkaengine.form.validator.Validator;
 
 public class TextFieldTest {
 
@@ -13,6 +18,34 @@ public class TextFieldTest {
     @Before
     public void setup() {
         target = new TextField();
+    }
+
+    @Test
+    public void apply_Label() throws Exception {
+        target.apply("name", new LabelImpl("TextName"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("TextName"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(0));
+    }
+
+    @Test
+    public void apply_Required() throws Exception {
+        target.apply("name", new RequiredImpl());
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(true));
+        assertThat(target.validators.size(), is(0));
+    }
+
+    @Test
+    public void apply_StartWith() throws Exception {
+        target.apply("name", new StartWithImpl("/"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0), is((Validator<String>) new StartWithValidator("/")));
     }
 
     @Test
@@ -59,7 +92,7 @@ public class TextFieldTest {
         assertEquals(true, target.clean());
         assertEquals(false, target.hasError());
     }
-    
+
     @Test
     public void clean_required_ng() {
         target.required = true;

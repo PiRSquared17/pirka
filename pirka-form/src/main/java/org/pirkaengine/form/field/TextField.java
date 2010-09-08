@@ -1,5 +1,11 @@
 package org.pirkaengine.form.field;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import org.pirkaengine.form.annotation.StartWith;
+import org.pirkaengine.form.validator.StartWithValidator;
+
 /**
  * テキストフィールド.
  * @author shuji.w6e
@@ -23,10 +29,24 @@ public class TextField extends BaseField<String> {
     }
 
     @Override
+    protected void apply(Annotation anno) {
+        try {
+            Class<? extends Annotation> type = anno.annotationType();
+            if (type == StartWith.class) {
+                Method valueMetod = anno.annotationType().getMethod("value");
+                String prefix = (String) valueMetod.invoke(anno);
+                validators.add(new StartWithValidator(prefix));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected String convert(String text) {
         return text;
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#toString(java.lang.Object)
@@ -36,7 +56,7 @@ public class TextField extends BaseField<String> {
         if (value == null) return "";
         return value;
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#equals(java.lang.Object)
@@ -47,7 +67,7 @@ public class TextField extends BaseField<String> {
         if (!(obj instanceof TextField)) return false;
         return super.equals(obj);
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#hashCode()
