@@ -22,4 +22,14 @@ public class StartWithValidatorTest {
         assertThat(target.isValid("xy"), is(true));
         assertThat(target.isValid("xyz"), is(true));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void const_null() throws Exception {
+        new StartWithValidator(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void const_empty_string() throws Exception {
+        new StartWithValidator("");
+    }
 }
