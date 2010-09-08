@@ -37,7 +37,7 @@ public class BooleanField extends BaseField<Boolean> {
      * @see org.pirkaengine.form.field.BaseField#isEmptyValue()
      */
     @Override
-    boolean isEmptyValue() {
+    protected boolean isEmptyValue() {
         return !Boolean.valueOf(this.rawText);
     }
 

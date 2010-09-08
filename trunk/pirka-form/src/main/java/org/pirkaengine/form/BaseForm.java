@@ -1,14 +1,12 @@
 package org.pirkaengine.form;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.pirkaengine.form.field.BaseField;
 import org.pirkaengine.form.field.BooleanField;
-
 
 /**
  * フォームの基底クラス.
@@ -22,7 +20,7 @@ import org.pirkaengine.form.field.BooleanField;
  */
 public abstract class BaseForm<E> {
     /** フィールドリスト */
-    protected final ArrayList<BaseField<?>> fields = new ArrayList<BaseField<?>>();
+    protected final LinkedList<BaseField<?>> fields = new LinkedList<BaseField<?>>();
 
     /**
      * 妥当性チェックを行う.
@@ -122,17 +120,7 @@ public abstract class BaseForm<E> {
                 BaseField<?> fieldBase = (BaseField<?>) field.get(form);
                 if (fieldBase == null) throw new IllegalArgumentException(); // TODO
                 String name = field.getName();
-                fieldBase.name = name;
-                fieldBase.label = name;
-                for (Annotation anno : field.getDeclaredAnnotations()) {
-                    Class<?> type = anno.annotationType();
-                    if (type == Required.class) {
-                        fieldBase.setRequired(true);
-                    } else if (type == Label.class) {
-                        String label = ((Label) anno).value();
-                        if (label != null && !label.isEmpty()) fieldBase.label = label;
-                    }
-                }
+                fieldBase.apply(name, field.getDeclaredAnnotations());
                 form.fields.add(fieldBase);
             }
             if (doPostinit) form.postinit();
