@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.pirkaengine.form.exception.ValidatorFormatException;
 
 /**
  * Test for {@link StartWithValidator}
@@ -29,12 +30,12 @@ public class StartWithValidatorTest {
         assertThat(target.isValid("xyz"), is(true));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorFormatException.class)
     public void const_null() throws Exception {
         new StartWithValidator(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ValidatorFormatException.class)
     public void const_empty_string() throws Exception {
         new StartWithValidator("");
     }

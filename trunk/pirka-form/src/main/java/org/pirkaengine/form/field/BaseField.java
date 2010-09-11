@@ -7,6 +7,7 @@ import java.util.List;
 import org.pirkaengine.form.ConvertException;
 import org.pirkaengine.form.annotation.Label;
 import org.pirkaengine.form.annotation.Required;
+import org.pirkaengine.form.exception.ValidatorFormatException;
 import org.pirkaengine.form.validator.Validator;
 
 /**
@@ -43,12 +44,18 @@ public abstract class BaseField<T> {
                 String label = ((Label) anno).value();
                 if (label != null && !label.isEmpty()) this.label = label;
             } else {
-                apply(anno);
+                validators.add(getValidator(anno));
             }
         }
     }
     
-    protected void apply(Annotation anno) {
+    /**
+     * アノテーションを指定してValidatorを取得する.
+     * @param anno
+     * @return
+     */
+    protected Validator<T> getValidator(Annotation anno) throws ValidatorFormatException {
+        throw new ValidatorFormatException("Undefined annotation: " + anno.annotationType().getName());
     }
 
     /**
