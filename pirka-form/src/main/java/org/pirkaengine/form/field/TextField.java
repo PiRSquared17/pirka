@@ -8,6 +8,7 @@ import org.pirkaengine.form.annotation.UriUsable;
 import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 import org.pirkaengine.form.validator.UriUsableValidator;
+import org.pirkaengine.form.validator.Validator;
 
 /**
  * テキストフィールド.
@@ -30,21 +31,18 @@ public class TextField extends BaseField<String> {
     public TextField(String defaultValue) {
         setValue(defaultValue);
     }
-
+    
     @Override
-    protected void apply(Annotation anno) {
-        try {
-            Class<? extends Annotation> type = anno.annotationType();
-            if (type == StartWith.class) {
-                validators.add(new StartWithValidator(StartWith.class.cast(anno).value()));
-            } else if (type == Regex.class) {
-                validators.add(new RegexValidator(Regex.class.cast(anno).value()));
-            } else if (type == UriUsable.class) {
-                validators.add(new UriUsableValidator());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    protected Validator<String> getValidator(Annotation anno) {
+        Class<? extends Annotation> type = anno.annotationType();
+        if (type == StartWith.class) {
+            return new StartWithValidator(StartWith.class.cast(anno).value());
+        } else if (type == Regex.class) {
+            return new RegexValidator(Regex.class.cast(anno).value());
+        } else if (type == UriUsable.class) {
+            return new UriUsableValidator();
         }
+        return super.getValidator(anno);
     }
 
     @Override

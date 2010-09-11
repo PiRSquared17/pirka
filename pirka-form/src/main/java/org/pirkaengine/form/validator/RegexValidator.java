@@ -3,19 +3,25 @@ package org.pirkaengine.form.validator;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.pirkaengine.form.exception.ValidatorFormatException;
+
 public class RegexValidator implements Validator<String> {
 
     private final Pattern pattern;
-    
+
     /**
      * 
      * @param regex
-     * @throws PatternSyntaxException
+     * @throws ValidatorFormatException
      */
-    public RegexValidator(String regex) throws PatternSyntaxException {
-        this.pattern = Pattern.compile(regex);
+    public RegexValidator(String regex) throws ValidatorFormatException {
+        try {
+            this.pattern = Pattern.compile(regex);
+        } catch (PatternSyntaxException e) {
+            throw new ValidatorFormatException("RegexValidator: " + regex, e);
+        }
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.validator.Validator#isValid(java.lang.Object)

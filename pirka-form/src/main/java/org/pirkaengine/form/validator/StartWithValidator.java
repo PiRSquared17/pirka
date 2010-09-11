@@ -1,5 +1,7 @@
 package org.pirkaengine.form.validator;
 
+import org.pirkaengine.form.exception.ValidatorFormatException;
+
 /**
  * <p>特定の文字列で開始されているかを判定するValidator</p>
  * @author shuji.w6e
@@ -10,7 +12,7 @@ public class StartWithValidator implements Validator<String> {
     private final String prefix;
 
     public StartWithValidator(String prefix) {
-        if (prefix == null || prefix.isEmpty()) throw new IllegalArgumentException("Illegal prefix: " + prefix);
+        if (prefix == null || prefix.isEmpty()) throw new ValidatorFormatException("Illegal prefix: " + prefix);
         this.prefix = prefix;
     }
 
