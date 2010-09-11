@@ -4,8 +4,10 @@ import java.lang.annotation.Annotation;
 
 import org.pirkaengine.form.annotation.Regex;
 import org.pirkaengine.form.annotation.StartWith;
+import org.pirkaengine.form.annotation.UriUsable;
 import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
+import org.pirkaengine.form.validator.UriUsableValidator;
 
 /**
  * テキストフィールド.
@@ -37,6 +39,8 @@ public class TextField extends BaseField<String> {
                 validators.add(new StartWithValidator(StartWith.class.cast(anno).value()));
             } else if (type == Regex.class) {
                 validators.add(new RegexValidator(Regex.class.cast(anno).value()));
+            } else if (type == UriUsable.class) {
+                validators.add(new UriUsableValidator());
             }
         } catch (Exception e) {
             e.printStackTrace();
