@@ -5,14 +5,20 @@ import java.util.regex.PatternSyntaxException;
 
 import org.pirkaengine.form.exception.ValidatorFormatException;
 
+/**
+ * 正規表現Validatorクラス.
+ * <p></p>
+ * @author shuji.w6e
+ * @since 0.1.0
+ */
 public class RegexValidator implements Validator<String> {
 
     private final Pattern pattern;
 
     /**
-     * 
-     * @param regex
-     * @throws ValidatorFormatException
+     * 正規表現パターンを指定してインスタンスを生成する.
+     * @param regex 正規表現パターン
+     * @throws ValidatorFormatException 正規表現パターンが不正な場合
      */
     public RegexValidator(String regex) throws ValidatorFormatException {
         try {

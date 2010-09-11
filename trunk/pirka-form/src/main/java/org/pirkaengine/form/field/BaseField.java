@@ -41,18 +41,19 @@ public abstract class BaseField<T> {
             if (type == Required.class) {
                 this.setRequired(true);
             } else if (type == Label.class) {
-                String label = ((Label) anno).value();
-                if (label != null && !label.isEmpty()) this.label = label;
+                String anoLabel = ((Label) anno).value();
+                if (anoLabel != null && !anoLabel.isEmpty()) this.label = anoLabel;
             } else {
                 validators.add(getValidator(anno));
             }
         }
     }
-    
+
     /**
      * アノテーションを指定してValidatorを取得する.
-     * @param anno
-     * @return
+     * @param anno アノテーション
+     * @return Validator
+     * @throws ValidatorFormatException アノテーションの書式が不正な場合
      */
     protected Validator<T> getValidator(Annotation anno) throws ValidatorFormatException {
         throw new ValidatorFormatException("Undefined annotation: " + anno.annotationType().getName());
@@ -153,8 +154,7 @@ public abstract class BaseField<T> {
 
     /**
      * 必須項目かどうかを設定する
-     * 
-     * @param required
+     * @param required 必須項目の場合true
      */
     public void setRequired(boolean required) {
         this.required = required;
@@ -162,7 +162,6 @@ public abstract class BaseField<T> {
 
     /**
      * 必須項目の場合trueを返す
-     * 
      * @return 必須項目の場合true
      */
     public boolean isRequired() {
@@ -171,7 +170,6 @@ public abstract class BaseField<T> {
 
     /*
      * (non-Javadoc)
-     * 
      * @see java.lang.Object#toString()
      */
     @Override
@@ -181,7 +179,6 @@ public abstract class BaseField<T> {
 
     /*
      * (non-Javadoc)
-     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override

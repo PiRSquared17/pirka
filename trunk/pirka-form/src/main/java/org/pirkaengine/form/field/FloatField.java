@@ -3,7 +3,7 @@ package org.pirkaengine.form.field;
 import org.pirkaengine.form.ConvertException;
 
 /**
- * 小数型フィールド
+ * 小数型フィールド.
  * @author shuji.w6e
  * @since 0.1.0
  */
@@ -17,7 +17,7 @@ public class FloatField extends BaseField<Float> {
     }
 
     /**
-     * デフォルト値を指定してフィールドを初期化する
+     * デフォルト値を指定してフィールドを初期化する.
      * @param defaultValue デフォルト値
      */
     public FloatField(Float defaultValue) {

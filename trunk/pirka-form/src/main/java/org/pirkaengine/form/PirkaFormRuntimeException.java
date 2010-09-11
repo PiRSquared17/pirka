@@ -6,34 +6,32 @@ package org.pirkaengine.form;
  * @since 0.1.0
  */
 public class PirkaFormRuntimeException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 原因となった例外とメッセージを指定してインスタンスを生成する.
-	 * 
-	 * @param message
-	 * @param cause
-	 */
-	public PirkaFormRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * 原因となった例外とメッセージを指定してインスタンスを生成する.
+     * 
+     * @param msg メッセージ
+     * @param cause 原因となった例外
+     */
+    public PirkaFormRuntimeException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-	/**
-	 * メッセージを指定してインスタンスを生成する.
-	 * 
-	 * @param message
-	 */
-	public PirkaFormRuntimeException(String message) {
-		super(message);
-	}
+    /**
+     * メッセージを指定してインスタンスを生成する.
+     * @param msg メッセージ
+     */
+    public PirkaFormRuntimeException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * 原因となった例外を指定してインスタンスを生成する.
-	 * 
-	 * @param cause
-	 */
-	public PirkaFormRuntimeException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * 原因となった例外を指定してインスタンスを生成する.
+     * @param cause 原因となった例外
+     */
+    public PirkaFormRuntimeException(Throwable cause) {
+        super(cause);
+    }
 
 }

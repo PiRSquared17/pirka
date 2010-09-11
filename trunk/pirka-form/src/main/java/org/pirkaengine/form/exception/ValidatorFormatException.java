@@ -12,7 +12,7 @@ public class ValidatorFormatException extends RuntimeException {
     
     /**
      * Constructor.
-     * @param msg
+     * @param msg メッセージ
      */
     public ValidatorFormatException(String msg) {
         super(msg);
@@ -20,8 +20,8 @@ public class ValidatorFormatException extends RuntimeException {
 
     /**
      * Constructor.
-     * @param msg
-     * @param cause
+     * @param msg メッセージ
+     * @param cause 原因となった例外
      */
     public ValidatorFormatException(String msg, Throwable cause) {
         super(msg, cause);

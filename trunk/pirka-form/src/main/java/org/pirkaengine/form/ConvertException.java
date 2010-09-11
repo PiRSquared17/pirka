@@ -12,24 +12,24 @@ public class ConvertException extends RuntimeException {
 
     /**
      * 原因となった例外とメッセージを指定してインスタンスを生成する.
-     * @param message
-     * @param cause
+     * @param msg メッセージ
+     * @param cause 原因となった例外
      */
-    public ConvertException(String message, Throwable cause) {
-        super(message, cause);
+    public ConvertException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
     /**
      * メッセージを指定してインスタンスを生成する.
-     * @param message
+     * @param msg メッセージ
      */
-    public ConvertException(String message) {
-        super(message);
+    public ConvertException(String msg) {
+        super(msg);
     }
 
     /**
      * 原因となった例外を指定してインスタンスを生成する.
-     * @param cause
+     * @param cause 原因となった例外
      */
     public ConvertException(Throwable cause) {
         super(cause);
