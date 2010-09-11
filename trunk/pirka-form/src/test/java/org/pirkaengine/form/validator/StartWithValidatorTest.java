@@ -5,6 +5,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Test for {@link StartWithValidator}
+ * <p></p>
+ * @author shuji.w6e
+ * @since 0.1.0
+ */
 public class StartWithValidatorTest {
 
     @Test

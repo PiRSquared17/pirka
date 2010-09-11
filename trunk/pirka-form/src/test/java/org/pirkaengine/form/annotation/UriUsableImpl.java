@@ -3,11 +3,11 @@ package org.pirkaengine.form.annotation;
 import java.lang.annotation.Annotation;
 
 @SuppressWarnings("all")
-public class RequiredImpl extends AbstractAnnotationImpl implements Required {
+public class UriUsableImpl extends AbstractAnnotationImpl implements UriUsable {
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return Required.class;
+        return UriUsable.class;
     }
 
 }
