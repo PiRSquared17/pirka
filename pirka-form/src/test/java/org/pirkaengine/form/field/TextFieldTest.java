@@ -6,8 +6,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.pirkaengine.form.annotation.LabelImpl;
+import org.pirkaengine.form.annotation.RegexImpl;
 import org.pirkaengine.form.annotation.RequiredImpl;
 import org.pirkaengine.form.annotation.StartWithImpl;
+import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 import org.pirkaengine.form.validator.Validator;
 
@@ -48,6 +50,16 @@ public class TextFieldTest {
         assertThat(target.validators.get(0), is((Validator<String>) new StartWithValidator("/")));
     }
 
+    @Test
+    public void apply_Regex() throws Exception {
+        target.apply("html", new RegexImpl(".*\\.html"));
+        assertThat(target.name, is("html"));
+        assertThat(target.label, is("html"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0), is((Validator<String>) new RegexValidator(".*\\.html")));
+    }
+    
     @Test
     public void convert() {
         assertEquals("Hello", target.convert("Hello"));

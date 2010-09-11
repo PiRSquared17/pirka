@@ -1,9 +1,10 @@
 package org.pirkaengine.form.field;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
+import org.pirkaengine.form.annotation.Regex;
 import org.pirkaengine.form.annotation.StartWith;
+import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 
 /**
@@ -33,9 +34,9 @@ public class TextField extends BaseField<String> {
         try {
             Class<? extends Annotation> type = anno.annotationType();
             if (type == StartWith.class) {
-                Method valueMetod = anno.annotationType().getMethod("value");
-                String prefix = (String) valueMetod.invoke(anno);
-                validators.add(new StartWithValidator(prefix));
+                validators.add(new StartWithValidator(StartWith.class.cast(anno).value()));
+            } else if (type == Regex.class) {
+                validators.add(new RegexValidator(Regex.class.cast(anno).value()));
             }
         } catch (Exception e) {
             e.printStackTrace();
