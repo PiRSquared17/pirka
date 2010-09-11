@@ -20,11 +20,11 @@ public class DateField extends BaseField<Date> {
      * デフォルト値nullで「yyyy/MM/dd」のフォーマットで初期化する.
      */
     public DateField() {
-        this(null, "yyyy/MM/dd");
+        this((Date) null);
     }
 
     /**
-     * デフォルト値を指定してフィールドを初期化する
+     * デフォルト値を指定してフィールドを初期化する.
      * @param defaultValue デフォルト値
      */
     public DateField(Date defaultValue) {

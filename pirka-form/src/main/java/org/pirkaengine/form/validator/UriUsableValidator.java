@@ -3,7 +3,7 @@ package org.pirkaengine.form.validator;
 import java.util.regex.Pattern;
 
 /**
- * <p>特定の文字列で開始されているかを判定するValidator</p>
+ * 特定の文字列で開始されているかを判定するValidator.
  * @author shuji.w6e
  * @since 0.1.0
  */

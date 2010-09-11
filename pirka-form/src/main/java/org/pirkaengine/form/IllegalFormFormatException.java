@@ -12,24 +12,24 @@ public class IllegalFormFormatException extends PirkaFormRuntimeException {
 
     /**
      * 原因となった例外とメッセージを指定してインスタンスを生成する.
-     * @param message
-     * @param cause
+     * @param msg メッセージ
+     * @param cause 原因となった例外
      */
-    public IllegalFormFormatException(String message, Throwable cause) {
-        super(message, cause);
+    public IllegalFormFormatException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
     /**
      * メッセージを指定してインスタンスを生成する.
-     * @param message
+     * @param msg メッセージ
      */
-    public IllegalFormFormatException(String message) {
-        super(message);
+    public IllegalFormFormatException(String msg) {
+        super(msg);
     }
 
     /**
      * 原因となった例外を指定してインスタンスを生成する.
-     * @param cause
+     * @param cause 原因となった例外
      */
     public IllegalFormFormatException(Throwable cause) {
         super(cause);

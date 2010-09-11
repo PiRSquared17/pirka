@@ -17,9 +17,9 @@ public class SelectEnumField<T extends Enum<T>> extends BaseField<T> {
     private final T[] options;
 
     /**
-     * 型とオプションを指定して、フィールドを初期化する。
-     * @param enumClass
-     * @param options
+     * 型とオプションを指定して、フィールドを初期化する.
+     * @param enumClass 列挙型
+     * @param options オプション
      */
     public SelectEnumField(Class<T> enumClass, T[] options) {
         this(enumClass, options, null);
@@ -27,9 +27,9 @@ public class SelectEnumField<T extends Enum<T>> extends BaseField<T> {
 
     /**
      * 型とオプションを指定して、フィールドを初期化する。
-     * @param enumClass
-     * @param options
-     * @param defaultValue 
+     * @param enumClass 列挙型
+     * @param options オプション
+     * @param defaultValue デフォルト値
      */
     public SelectEnumField(Class<T> enumClass, T[] options, T defaultValue) {
         if (enumClass == null) throw new IllegalArgumentException("enumClass == null");

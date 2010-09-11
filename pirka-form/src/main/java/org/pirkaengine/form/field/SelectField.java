@@ -24,8 +24,8 @@ public class SelectField extends BaseField<String> {
     }
     
     /**
-     * オプションの文字列の配列を指定して初期化する
-     * @param options
+     * オプションの文字列の配列を指定して初期化する。
+     * @param options オプション
      */
     public SelectField(String[] options) {
         if (options == null) throw new IllegalArgumentException("options == null");
@@ -34,8 +34,8 @@ public class SelectField extends BaseField<String> {
     }
 
     /**
-     * オプションの文字列の配列を指定して初期化する
-     * @param options
+     * オプションの文字列の配列を指定して初期化する。
+     * @param options オプション
      */
     public SelectField(List<String> options) {
         if (options == null) throw new IllegalArgumentException("options == null");
@@ -44,8 +44,8 @@ public class SelectField extends BaseField<String> {
     }
     
     /**
-     * オプションを再設定する
-     * @param newOptions
+     * オプションを再設定する。
+     * @param newOptions オプション
      */
     public void setOptions(List<String> newOptions) {
         this.options.clear();
@@ -53,8 +53,8 @@ public class SelectField extends BaseField<String> {
     }
     
     /**
-     * オプションを追加する
-     * @param option
+     * オプションを追加する。
+     * @param option オプション
      */
     public void addOption(String option) {
         this.options.add(option);

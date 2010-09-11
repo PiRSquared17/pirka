@@ -3,7 +3,7 @@ package org.pirkaengine.form.field;
 import org.pirkaengine.form.ConvertException;
 
 /**
- * 整数型フィールド
+ * 整数型フィールド.
  * @author shuji.w6e
  * @since 0.1.0
  */
@@ -17,7 +17,7 @@ public class IntegerField extends BaseField<Integer> {
     }
 
     /**
-     * デフォルト値を指定してフィールドを初期化する
+     * デフォルト値を指定してフィールドを初期化する.
      * @param defaultValue デフォルト値
      */
     public IntegerField(Integer defaultValue) {

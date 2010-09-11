@@ -3,14 +3,18 @@ package org.pirkaengine.form.validator;
 import org.pirkaengine.form.exception.ValidatorFormatException;
 
 /**
- * <p>特定の文字列で開始されているかを判定するValidator</p>
+ * 特定の文字列で開始されているかを判定するValidator.
  * @author shuji.w6e
  * @since 0.1.0
  */
 public class StartWithValidator implements Validator<String> {
 
     private final String prefix;
-
+    
+    /**
+     * プレフィックスを指定してインスタンスを生成する.
+     * @param prefix プレフィックス
+     */
     public StartWithValidator(String prefix) {
         if (prefix == null || prefix.isEmpty()) throw new ValidatorFormatException("Illegal prefix: " + prefix);
         this.prefix = prefix;

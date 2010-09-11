@@ -2,7 +2,7 @@ package org.pirkaengine.form.field;
 
 
 /**
- * Boolean型フィールド
+ * Boolean型フィールド.
  * @author shuji.w6e
  * @since 0.1.0
  */
@@ -16,7 +16,7 @@ public class BooleanField extends BaseField<Boolean> {
     }
 
     /**
-     * デフォルト値を指定してフィールドを初期化する
+     * デフォルト値を指定してフィールドを初期化する.
      * @param defaultValue デフォルト値
      */
     public BooleanField(Boolean defaultValue) {
