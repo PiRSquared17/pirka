@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.exception.ConvertException;
 
 
 /**
@@ -84,7 +84,7 @@ public class SelectField extends BaseField<String> {
     @Override
     protected String convert(String text) {
         if (text == null || text.isEmpty()) return null;
-        if (!options.isEmpty() && !options.contains(text)) throw new ConvertException("unsupported option: " + text);
+        if (!options.isEmpty() && !options.contains(text)) throw new ConvertException(options.toString());
         return text;
     }
 

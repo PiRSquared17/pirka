@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.pirkaengine.form.exception.IllegalFormFormatException;
 import org.pirkaengine.form.field.BaseField;
 import org.pirkaengine.form.field.BooleanField;
 

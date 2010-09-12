@@ -4,10 +4,10 @@ import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pirkaengine.form.ConvertException;
 import org.pirkaengine.form.Messages;
 import org.pirkaengine.form.annotation.Label;
 import org.pirkaengine.form.annotation.Required;
+import org.pirkaengine.form.exception.ConvertException;
 import org.pirkaengine.form.exception.ValidatorFormatException;
 import org.pirkaengine.form.validator.Validator;
 
@@ -95,15 +95,14 @@ public abstract class BaseField<T> {
      */
     public boolean clean() {
         if (isRequired() && isEmptyValue()) {
-            // TODO メッセージ
-            errors.add(Messages.getMessage(Messages.REQUIRED, this.label));
-            return !hasError();
+            errors.add(Messages.getMessage("validator.required", this.label));
+            return false;
         }
         try {
             this.value = convert(rawText);
         } catch (ConvertException e) {
-            // TODO メッセージ
-            errors.add(label + "を正しいフォーマットで入力してください。");
+            errors.add(Messages.getMessage("validator.invalidFormat", this.label, e.getFormat()));
+            return false;
         }
         validate();
         return !hasError();

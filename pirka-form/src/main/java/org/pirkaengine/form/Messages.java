@@ -10,8 +10,6 @@ import java.util.Locale;
  */
 public final class Messages {
 
-    /** Message Code: Required */
-    public static final String REQUIRED = "validator.required";
     private final static MessagesDelegate delegate = new MessagesDelegate();
 
     private Messages() {
