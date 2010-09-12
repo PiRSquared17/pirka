@@ -12,22 +12,22 @@ import org.pirkaengine.form.exception.ValidatorFormatException;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class StartWithValidatorTest {
+public class StartWithValidatorTest extends ValidatorTest {
 
     @Test
     public void isValid() throws Exception {
         StartWithValidator target = new StartWithValidator("/");
-        assertThat(target.isValid("/"), is(true));
-        assertThat(target.isValid("/aaa"), is(true));
-        assertThat(target.isValid("aaa"), is(false));
+        assertThat(target.validate("target", "/"), is(nullValue()));
+        assertThat(target.validate("target", "/aaa"), is(nullValue()));
+        assertThat(target.validate("target", "aaa"), is("target is not start with '/'."));
     }
 
     @Test
     public void isValid_xy() throws Exception {
         StartWithValidator target = new StartWithValidator("xy");
-        assertThat(target.isValid("x"), is(false));
-        assertThat(target.isValid("xy"), is(true));
-        assertThat(target.isValid("xyz"), is(true));
+        assertThat(target.validate("target", "x"), is("target is not start with 'xy'."));
+        assertThat(target.validate("target", "xy"), is(nullValue()));
+        assertThat(target.validate("target", "xyz"), is(nullValue()));
     }
 
     @Test(expected = ValidatorFormatException.class)

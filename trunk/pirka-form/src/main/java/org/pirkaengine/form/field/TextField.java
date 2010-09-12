@@ -32,6 +32,10 @@ public class TextField extends BaseField<String> {
         setValue(defaultValue);
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getValidator(java.lang.annotation.Annotation)
+     */
     @Override
     protected Validator<String> getValidator(Annotation anno) {
         Class<? extends Annotation> type = anno.annotationType();

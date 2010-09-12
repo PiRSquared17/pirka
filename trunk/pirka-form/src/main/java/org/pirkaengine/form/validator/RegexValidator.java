@@ -11,7 +11,7 @@ import org.pirkaengine.form.exception.ValidatorFormatException;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class RegexValidator implements Validator<String> {
+public class RegexValidator extends ValidatorBase<String> {
 
     private final Pattern pattern;
 
@@ -27,14 +27,15 @@ public class RegexValidator implements Validator<String> {
             throw new ValidatorFormatException("RegexValidator: " + regex, e);
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.pirkaengine.form.validator.Validator#isValid(java.lang.Object)
-     */
+    
     @Override
-    public boolean isValid(String value) {
+    protected boolean isValid(String value) {
         return pattern.matcher(value).matches();
+    }
+
+    @Override
+    public String getMessageKey() {
+        return "validator.regex";
     }
 
     /* (non-Javadoc)

@@ -89,7 +89,7 @@ public class SelectEnumField<T extends Enum<T>> extends BaseField<T> {
     public int hashCode() {
         int result = super.hashCode();
         result = 17 * result + this.enumClass.hashCode();
-        result = 17 * result + this.options.hashCode();
+        result = 17 * result + Arrays.hashCode(options);
         return result;
     }
 }

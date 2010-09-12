@@ -2,6 +2,7 @@ package org.pirkaengine.form;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +21,7 @@ import org.pirkaengine.form.field.BooleanField;
  */
 public abstract class BaseForm<E> {
     /** フィールドリスト */
-    protected final LinkedList<BaseField<?>> fields = new LinkedList<BaseField<?>>();
+    protected final List<BaseField<?>> fields = new LinkedList<BaseField<?>>();
 
     /**
      * 妥当性チェックを行う.
@@ -55,26 +56,26 @@ public abstract class BaseForm<E> {
      */
     protected void postinit() {
     }
-
+    
     /**
      * フォームのインスタンスを生成する.
      * <p>
      * フォームに定義されたアノテーションから、
      * 各フィールドの設定を行う。
      * </p>
-     * @param <T>
-     * @param formClass
-     * @param request
+     * @param formClass フォームのclassインスタンス
+     * @param request リクエスト
+     * @param <T> フォーム型
      * @return フォームのインスタンス
      */
     public static <T extends BaseForm<?>> T newForm(Class<T> formClass, HttpServletRequest request) {
         T form = newForm(formClass, false);
         for (BaseField<?> field : form.fields) {
-            if (BooleanField.class.isInstance(field) && request.getParameter(field.name) == null) {
+            if (BooleanField.class.isInstance(field) && request.getParameter(field.getName()) == null) {
                 // Boolean Field ＝ Check Boxの場合、未チェックはパラメータで設定されない
                 continue;
             }
-            field.setRawText(request.getParameter(field.name));
+            field.setRawText(request.getParameter(field.getName()));
         }
         return form;
     }
@@ -85,10 +86,10 @@ public abstract class BaseForm<E> {
      * フォームに定義されたアノテーションから、
      * 各フィールドの設定を行う。
      * </p>
-     * @param <T>
-     * @param <E>
-     * @param formClass
-     * @param entity
+     * @param formClass フォームのclassインスタンス
+     * @param entity エンティティ
+     * @param <T> フォーム型
+     * @param <E> フォームのエンティティ型
      * @return フォームのインスタンス
      */
     public static <T extends BaseForm<E>, E> T newForm(Class<T> formClass, E entity) {
@@ -103,8 +104,8 @@ public abstract class BaseForm<E> {
      * フォームに定義されたアノテーションから、
      * 各フィールドの設定を行う。
      * </p>
-     * @param <T>
-     * @param formClass
+     * @param formClass フォームのclassインスタンス
+     * @param <T> フォーム型
      * @return フォームのインスタンス
      */
     public static <T extends BaseForm<?>> T newForm(Class<T> formClass) {

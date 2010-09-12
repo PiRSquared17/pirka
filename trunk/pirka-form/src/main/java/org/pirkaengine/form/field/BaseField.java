@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.Messages;
 import org.pirkaengine.form.annotation.Label;
 import org.pirkaengine.form.annotation.Required;
 import org.pirkaengine.form.exception.ValidatorFormatException;
@@ -19,30 +20,56 @@ import org.pirkaengine.form.validator.Validator;
  */
 public abstract class BaseField<T> {
     /** フォールド名 */
-    public String name;
+    protected String name;
     /** 値 */
     T value;
     /** 入力文字列 */
     String rawText = "";
     /** ラベル */
-    public String label;
+    protected String label;
     /** エラーメッセージ */
-    public final List<String> errors = new LinkedList<String>();
+    protected final List<String> errors = new LinkedList<String>();
     /** 必須の場合true */
     boolean required;
     /** Validators */
     protected final List<Validator<T>> validators = new LinkedList<Validator<T>>();
 
-    public void apply(String name, Annotation... annos) {
-        this.name = name;
-        this.label = name;
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * @return the errors
+     */
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    /**
+     * フィールドの各種パラメータを適用する.
+     * @param aName フィールド名
+     * @param annos アノテーション
+     */
+    public void apply(String aName, Annotation... annos) {
+        this.name = aName;
+        this.label = aName;
         for (Annotation anno : annos) {
             Class<?> type = anno.annotationType();
             if (type == Required.class) {
                 this.setRequired(true);
             } else if (type == Label.class) {
                 String anoLabel = ((Label) anno).value();
-                if (anoLabel != null && !anoLabel.isEmpty()) this.label = anoLabel;
+                this.label = Messages.getMessage(anoLabel);
             } else {
                 validators.add(getValidator(anno));
             }
@@ -69,7 +96,7 @@ public abstract class BaseField<T> {
     public boolean clean() {
         if (isRequired() && isEmptyValue()) {
             // TODO メッセージ
-            errors.add(label + "は必須項目です。");
+            errors.add(Messages.getMessage(Messages.REQUIRED, this.label));
             return !hasError();
         }
         try {
@@ -78,7 +105,7 @@ public abstract class BaseField<T> {
             // TODO メッセージ
             errors.add(label + "を正しいフォーマットで入力してください。");
         }
-        validate(this.value);
+        validate();
         return !hasError();
     }
 
@@ -90,19 +117,30 @@ public abstract class BaseField<T> {
         return this.rawText == null || this.rawText.isEmpty();
     }
 
-    protected void validate(T value) {
+    /**
+     * 値の妥当性チェックを行う
+     */
+    protected void validate() {
         for (Validator<T> v : validators) {
-            if (!v.isValid(this.value)) this.errors.add("");
+            String error = v.validate(this.label, this.value);
+            if (error != null) this.errors.add(error);
         }
     }
 
+    /**
+     * テキストを値にコンバートする。
+     * @param text テキスト
+     * @return 変換された値
+     * @throws ConvertException コンバートに失敗した場合
+     */
     abstract protected T convert(String text) throws ConvertException;
 
-    abstract protected String toString(T value);
-
-    protected String createErrorMessage() {
-        return null;
-    }
+    /**
+     * 値をテキストにコンバートする
+     * @param aValue 値
+     * @return コンバートされたテキスト
+     */
+    abstract protected String toString(T aValue);
 
     /**
      * フィールドがエラーを保持する場合にtrueを返す
@@ -177,6 +215,7 @@ public abstract class BaseField<T> {
         return this.rawText;
     }
 
+    //CHECKSTYLE:OFF
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
