@@ -11,17 +11,18 @@ import org.junit.Test;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class UriUsableValidatorTest {
+public class UriUsableValidatorTest extends ValidatorTest {
 
     @Test
     public void isValid() {
-        assertThat(new UriUsableValidator().isValid(""), is(true));
-        assertThat(new UriUsableValidator().isValid("/index.html"), is(true));
-        assertThat(new UriUsableValidator().isValid("aaa/bbb-01"), is(true));
-        assertThat(new UriUsableValidator().isValid("?"), is(false));
-        assertThat(new UriUsableValidator().isValid("マルチバイト"), is(false));
-        assertThat(new UriUsableValidator().isValid("aa.html#tag"), is(false));
-        assertThat(new UriUsableValidator().isValid("100%"), is(false));
-        assertThat(new UriUsableValidator().isValid("(int)"), is(false));
+        String msg = "target contains unusable charactor to URI.";
+        assertThat(new UriUsableValidator().validate("target", ""), is(nullValue()));
+        assertThat(new UriUsableValidator().validate("target", "/index.html"), is(nullValue()));
+        assertThat(new UriUsableValidator().validate("target", "aaa/bbb-01"), is(nullValue()));
+        assertThat(new UriUsableValidator().validate("target", "?"), is(msg));
+        assertThat(new UriUsableValidator().validate("target", "マルチバイト"), is(msg));
+        assertThat(new UriUsableValidator().validate("target", "aa.html#tag"), is(msg));
+        assertThat(new UriUsableValidator().validate("target", "100%"), is(msg));
+        assertThat(new UriUsableValidator().validate("target", "(int)"), is(msg));
     }
 }

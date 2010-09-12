@@ -7,10 +7,10 @@ import org.pirkaengine.form.exception.ValidatorFormatException;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class StartWithValidator implements Validator<String> {
+public class StartWithValidator extends ValidatorBase<String> {
 
     private final String prefix;
-    
+
     /**
      * プレフィックスを指定してインスタンスを生成する.
      * @param prefix プレフィックス
@@ -20,13 +20,20 @@ public class StartWithValidator implements Validator<String> {
         this.prefix = prefix;
     }
 
-    /* (non-Javadoc)
-     * @see org.pirkaengine.form.validator.Validator#isValid(java.lang.String)
-     */
     @Override
-    public boolean isValid(String value) {
+    protected boolean isValid(String value) {
         if (value == null) throw new IllegalArgumentException("value is null.");
         return value.startsWith(prefix);
+    }
+
+    @Override
+    public String getMessageKey() {
+        return "validator.startWith";
+    }
+
+    @Override
+    protected Object[] getMessageArgs(String name, String value) {
+        return new Object[] { name, prefix };
     }
 
     /* (non-Javadoc)

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class UriUsableValidator implements Validator<String> {
+public class UriUsableValidator extends ValidatorBase<String> {
 
     private static final Pattern PATTERN = Pattern.compile("[\\w-\\./~,$!\\*';:@=&+]*");
 
@@ -16,20 +16,22 @@ public class UriUsableValidator implements Validator<String> {
      */
     public UriUsableValidator() {
     }
-
-    /* (non-Javadoc)
-     * @see org.pirkaengine.form.validator.Validator#isValid(java.lang.String)
-     */
+    
     @Override
-    public boolean isValid(String value) {
+    protected boolean isValid(String value) {
         return PATTERN.matcher(value).matches();
     }
-    
+
+    @Override
+    public String getMessageKey() {
+        return "validator.uriUsable";
+    }
+
     @Override
     public int hashCode() {
         return 1;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;

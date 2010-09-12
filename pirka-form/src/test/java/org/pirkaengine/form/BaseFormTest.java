@@ -19,8 +19,8 @@ public class BaseFormTest {
     @Test
     public void newForm_TextField() {
         TextFieldForm form = TextFieldForm.newForm(TextFieldForm.class);
-        assertThat(form.text.name, is("text"));
-        assertThat(form.text.label, is("text"));
+        assertThat(form.text.getName(), is("text"));
+        assertThat(form.text.getLabel(), is("text"));
         assertThat(form.text.isRequired(), is(false));
     }
 
@@ -33,8 +33,8 @@ public class BaseFormTest {
     @Test
     public void newForm_TextField_required() {
         RequiredTextFieldForm form = RequiredTextFieldForm.newForm(RequiredTextFieldForm.class);
-        assertThat(form.text.name, is("text"));
-        assertThat(form.text.label, is("Name"));
+        assertThat(form.text.getName(), is("text"));
+        assertThat(form.text.getLabel(), is("Name"));
         assertThat(form.text.isRequired(), is(true));
     }
 
@@ -45,8 +45,8 @@ public class BaseFormTest {
     @Test
     public void newForm_DateField() {
         DateFieldForm form = DateFieldForm.newForm(DateFieldForm.class);
-        assertEquals("date", form.date.name);
-        assertEquals("date", form.date.label);
+        assertEquals("date", form.date.getName());
+        assertEquals("date", form.date.getLabel());
         assertEquals(false, form.date.isRequired());
     }
 
@@ -57,8 +57,8 @@ public class BaseFormTest {
     @Test
     public void newForm_SelectEnumField() {
         SelectEnumFieldForm form = SelectEnumFieldForm.newForm(SelectEnumFieldForm.class);
-        assertEquals("options", form.options.name);
-        assertEquals("options", form.options.label);
+        assertEquals("options", form.options.getName());
+        assertEquals("options", form.options.getLabel());
         assertEquals(false, form.options.isRequired());
     }
 
