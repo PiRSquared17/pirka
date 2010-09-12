@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.exception.ConvertException;
 import org.pirkaengine.form.field.SelectEnumField;
 
 public class SelectEnumFieldTest {

@@ -1,6 +1,6 @@
 package org.pirkaengine.form.field;
 
-import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.exception.ConvertException;
 
 /**
  * 小数型フィールド.

@@ -7,7 +7,7 @@ import java.util.Date;
 
 
 import org.junit.Test;
-import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.exception.ConvertException;
 import org.pirkaengine.form.field.DateField;
 
 public class DateFieldTest {

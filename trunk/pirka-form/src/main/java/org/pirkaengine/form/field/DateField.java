@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.pirkaengine.form.ConvertException;
+import org.pirkaengine.form.exception.ConvertException;
 
 
 /**
@@ -57,7 +57,7 @@ public class DateField extends BaseField<Date> {
         try {
             return new SimpleDateFormat(dateFormat).parse(text);
         } catch (ParseException e) {
-            throw new ConvertException(e);
+            throw new ConvertException(e, dateFormat);
         }
     }
     

@@ -1,4 +1,4 @@
-package org.pirkaengine.form;
+package org.pirkaengine.form.exception;
 
 
 /**
@@ -6,7 +6,7 @@ package org.pirkaengine.form;
  * @author shuji.w6e
  * @since 0.1.0
  */
-public class IllegalFormFormatException extends PirkaFormRuntimeException {
+public class IllegalFormFormatException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
