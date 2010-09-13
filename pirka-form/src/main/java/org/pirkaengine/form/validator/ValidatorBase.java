@@ -1,6 +1,6 @@
 package org.pirkaengine.form.validator;
 
-import org.pirkaengine.form.Messages;
+import org.pirkaengine.form.FormMessage;
 
 /**
  * Validatorの基底クラス.
@@ -10,7 +10,18 @@ import org.pirkaengine.form.Messages;
  * @param <T>
  */
 public abstract class ValidatorBase<T> implements Validator<T> {
-
+    
+    /** FormMessage */
+    protected FormMessage formMessage = FormMessage.NULL_MESSAGE;
+    
+    /**
+     * フォームメッセージを設定する
+     * @param formMessage メッセージ
+     */
+    public void setFormMessage(FormMessage formMessage) {
+        this.formMessage = formMessage;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.validator.Validator#validate(java.lang.String, java.lang.Object)
@@ -18,7 +29,7 @@ public abstract class ValidatorBase<T> implements Validator<T> {
     @Override
     public String validate(String name, T value) {
         if (!isValid(value)) {
-            return Messages.getMessage(getMessageKey(), getMessageArgs(name, value));
+            return formMessage.getFormMessage(getMessageKey(), getMessageArgs(name, value));
         }
         return null;
     }

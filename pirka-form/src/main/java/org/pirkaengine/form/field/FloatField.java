@@ -24,6 +24,15 @@ public class FloatField extends BaseField<Float> {
         setValue(defaultValue);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<Float> getFieldType() {
+        return Float.class;
+    }
+
     @Override
     protected Float convert(String text) throws ConvertException {
         if (text == null || text.isEmpty()) return null;
@@ -33,7 +42,7 @@ public class FloatField extends BaseField<Float> {
             throw new ConvertException(e);
         }
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#toString(java.lang.Object)
@@ -43,7 +52,7 @@ public class FloatField extends BaseField<Float> {
         if (value == null) return "";
         return value.toString();
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#equals(java.lang.Object)
@@ -54,7 +63,7 @@ public class FloatField extends BaseField<Float> {
         if (!(obj instanceof FloatField)) return false;
         return super.equals(obj);
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#hashCode()
@@ -62,5 +71,5 @@ public class FloatField extends BaseField<Float> {
     @Override
     public int hashCode() {
         return super.hashCode();
-    }    
+    }
 }

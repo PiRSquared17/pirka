@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.pirkaengine.form.exception.ConvertException;
 
-
 /**
  * セレクトフィールド.
  * @author shuji.w6e
@@ -22,7 +21,7 @@ public class SelectField extends BaseField<String> {
     public SelectField() {
         this(new ArrayList<String>());
     }
-    
+
     /**
      * オプションの文字列の配列を指定して初期化する。
      * @param options オプション
@@ -42,7 +41,16 @@ public class SelectField extends BaseField<String> {
         this.options = options;
         if (!options.isEmpty()) setValue(options.get(0));
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<String> getFieldType() {
+        return String.class;
+    }
+
     /**
      * オプションを再設定する。
      * @param newOptions オプション
@@ -51,7 +59,7 @@ public class SelectField extends BaseField<String> {
         this.options.clear();
         this.options.addAll(newOptions);
     }
-    
+
     /**
      * オプションを追加する。
      * @param option オプション
@@ -59,7 +67,7 @@ public class SelectField extends BaseField<String> {
     public void addOption(String option) {
         this.options.add(option);
     }
-    
+
     /**
      * オプション項目を取得する.
      * @return オプション項目
@@ -67,7 +75,7 @@ public class SelectField extends BaseField<String> {
     public List<String> options() {
         return options;
     }
-    
+
     /**
      * バリュー項目を取得する.
      * @return バリュー項目
@@ -75,7 +83,7 @@ public class SelectField extends BaseField<String> {
     public List<String> values() {
         return options;
     }
-    
+
     /*
      * (non-Javadoc)
      * 

@@ -51,6 +51,15 @@ public class DateField extends BaseField<Date> {
         setValue(defaultValue);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<Date> getFieldType() {
+        return Date.class;
+    }
+    
     @Override
     protected Date convert(String text) {
         if (text == null || text.isEmpty()) return null;

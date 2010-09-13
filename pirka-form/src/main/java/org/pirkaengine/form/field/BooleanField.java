@@ -25,6 +25,15 @@ public class BooleanField extends BaseField<Boolean> {
     
     /*
      * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<Boolean> getFieldType() {
+        return Boolean.class;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#convert(java.lang.String)
      */
     @Override

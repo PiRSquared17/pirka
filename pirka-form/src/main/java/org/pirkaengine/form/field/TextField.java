@@ -2,6 +2,7 @@ package org.pirkaengine.form.field;
 
 import java.lang.annotation.Annotation;
 
+import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.annotation.Regex;
 import org.pirkaengine.form.annotation.StartWith;
 import org.pirkaengine.form.annotation.UriUsable;
@@ -9,6 +10,7 @@ import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 import org.pirkaengine.form.validator.UriUsableValidator;
 import org.pirkaengine.form.validator.Validator;
+import org.pirkaengine.form.validator.ValidatorBase;
 
 /**
  * テキストフィールド.
@@ -31,24 +33,43 @@ public class TextField extends BaseField<String> {
     public TextField(String defaultValue) {
         setValue(defaultValue);
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<String> getFieldType() {
+        return String.class;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getValidator(org.pirkaengine.form.FormMessage,
+     *  java.lang.annotation.Annotation)
+     */
+    @Override
+    protected Validator<String> getValidator(FormMessage message, Annotation anno) {
+        Class<? extends Annotation> type = anno.annotationType();
+        ValidatorBase<String> validator = null;
+        if (type == StartWith.class) {
+            validator = new StartWithValidator(StartWith.class.cast(anno).value());
+        } else if (type == Regex.class) {
+            validator = new RegexValidator(Regex.class.cast(anno).value());
+        } else if (type == UriUsable.class) {
+            validator = new UriUsableValidator();
+        }
+        if (validator != null) {
+            validator.setFormMessage(message);
+            return validator;
+        }
+        return super.getValidator(message, anno);
+    }
     
     /*
      * (non-Javadoc)
-     * @see org.pirkaengine.form.field.BaseField#getValidator(java.lang.annotation.Annotation)
+     * @see org.pirkaengine.form.field.BaseField#convert(java.lang.String)
      */
-    @Override
-    protected Validator<String> getValidator(Annotation anno) {
-        Class<? extends Annotation> type = anno.annotationType();
-        if (type == StartWith.class) {
-            return new StartWithValidator(StartWith.class.cast(anno).value());
-        } else if (type == Regex.class) {
-            return new RegexValidator(Regex.class.cast(anno).value());
-        } else if (type == UriUsable.class) {
-            return new UriUsableValidator();
-        }
-        return super.getValidator(anno);
-    }
-
     @Override
     protected String convert(String text) {
         return text;

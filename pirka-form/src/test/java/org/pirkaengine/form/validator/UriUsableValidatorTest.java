@@ -16,13 +16,20 @@ public class UriUsableValidatorTest extends ValidatorTest {
     @Test
     public void isValid() {
         String msg = "target contains unusable charactor to URI.";
-        assertThat(new UriUsableValidator().validate("target", ""), is(nullValue()));
-        assertThat(new UriUsableValidator().validate("target", "/index.html"), is(nullValue()));
-        assertThat(new UriUsableValidator().validate("target", "aaa/bbb-01"), is(nullValue()));
-        assertThat(new UriUsableValidator().validate("target", "?"), is(msg));
-        assertThat(new UriUsableValidator().validate("target", "マルチバイト"), is(msg));
-        assertThat(new UriUsableValidator().validate("target", "aa.html#tag"), is(msg));
-        assertThat(new UriUsableValidator().validate("target", "100%"), is(msg));
-        assertThat(new UriUsableValidator().validate("target", "(int)"), is(msg));
+        assertThat(newUriUsableValidator().validate("target", ""), is(nullValue()));
+        assertThat(newUriUsableValidator().validate("target", "/index.html"), is(nullValue()));
+        assertThat(newUriUsableValidator().validate("target", "aaa/bbb-01"), is(nullValue()));
+        assertThat(newUriUsableValidator().validate("target", "?"), is(msg));
+        assertThat(newUriUsableValidator().validate("target", "マルチバイト"), is(msg));
+        assertThat(newUriUsableValidator().validate("target", "aa.html#tag"), is(msg));
+        assertThat(newUriUsableValidator().validate("target", "100%"), is(msg));
+        assertThat(newUriUsableValidator().validate("target", "(int)"), is(msg));
     }
+
+    private UriUsableValidator newUriUsableValidator() {
+        UriUsableValidator target = new UriUsableValidator();
+        target.setFormMessage(formMessage);
+        return target;
+    }
+    
 }

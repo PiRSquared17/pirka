@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pirkaengine.form.Messages;
+import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.annotation.Label;
 import org.pirkaengine.form.annotation.Required;
 import org.pirkaengine.form.exception.ConvertException;
@@ -22,17 +22,25 @@ public abstract class BaseField<T> {
     /** フォールド名 */
     protected String name;
     /** 値 */
-    T value;
+    protected T value;
     /** 入力文字列 */
-    String rawText = "";
+    protected String rawText = "";
     /** ラベル */
     protected String label;
-    /** エラーメッセージ */
-    protected final List<String> errors = new LinkedList<String>();
     /** 必須の場合true */
-    boolean required;
+    protected boolean required;
     /** Validators */
     protected final List<Validator<T>> validators = new LinkedList<Validator<T>>();
+    /** エラーメッセージ */
+    protected final List<String> errors = new LinkedList<String>();
+    /** FormMessage */
+    protected FormMessage message = FormMessage.NULL_MESSAGE;
+
+    /**
+     * フィールドの型を返す.
+     * @return フィールドの型クラス
+     */
+    public abstract Class<T> getFieldType();
 
     /**
      * @return the name
@@ -58,31 +66,34 @@ public abstract class BaseField<T> {
     /**
      * フィールドの各種パラメータを適用する.
      * @param aName フィールド名
+     * @param aMessage フォームメッセージ
      * @param annos アノテーション
      */
-    public void apply(String aName, Annotation... annos) {
+    public void apply(String aName, FormMessage aMessage, Annotation... annos) {
         this.name = aName;
         this.label = aName;
+        this.message = aMessage;
         for (Annotation anno : annos) {
             Class<?> type = anno.annotationType();
             if (type == Required.class) {
                 this.setRequired(true);
             } else if (type == Label.class) {
                 String anoLabel = ((Label) anno).value();
-                this.label = Messages.getMessage(anoLabel);
+                this.label = aMessage.getFormMessage(anoLabel);
             } else {
-                validators.add(getValidator(anno));
+                this.validators.add(getValidator(aMessage, anno));
             }
         }
     }
 
     /**
      * アノテーションを指定してValidatorを取得する.
+     * @param formMessage フォームメッセージ
      * @param anno アノテーション
      * @return Validator
      * @throws ValidatorFormatException アノテーションの書式が不正な場合
      */
-    protected Validator<T> getValidator(Annotation anno) throws ValidatorFormatException {
+    protected Validator<T> getValidator(FormMessage formMessage, Annotation anno) throws ValidatorFormatException {
         throw new ValidatorFormatException("Undefined annotation: " + anno.annotationType().getName());
     }
 
@@ -95,13 +106,13 @@ public abstract class BaseField<T> {
      */
     public boolean clean() {
         if (isRequired() && isEmptyValue()) {
-            errors.add(Messages.getMessage("validator.required", this.label));
+            errors.add(message.getFormMessage("validator.required", this.label));
             return false;
         }
         try {
             this.value = convert(rawText);
         } catch (ConvertException e) {
-            errors.add(Messages.getMessage("validator.invalidFormat", this.label, e.getFormat()));
+            errors.add(message.getFormMessage("validator.invalidFormat", this.label, e.getFormat()));
             return false;
         }
         validate();
