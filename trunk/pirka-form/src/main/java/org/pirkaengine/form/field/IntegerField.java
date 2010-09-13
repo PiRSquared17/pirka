@@ -24,6 +24,15 @@ public class IntegerField extends BaseField<Integer> {
         setValue(defaultValue);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<Integer> getFieldType() {
+        return Integer.class;
+    }
+
     @Override
     protected Integer convert(String text) {
         if (text == null || text.isEmpty()) return null;
@@ -33,7 +42,7 @@ public class IntegerField extends BaseField<Integer> {
             throw new ConvertException(e);
         }
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#toString(java.lang.Object)
@@ -43,7 +52,7 @@ public class IntegerField extends BaseField<Integer> {
         if (value == null) return "";
         return value.toString();
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#equals(java.lang.Object)
@@ -54,7 +63,7 @@ public class IntegerField extends BaseField<Integer> {
         if (!(obj instanceof IntegerField)) return false;
         return super.equals(obj);
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#hashCode()

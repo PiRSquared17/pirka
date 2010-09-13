@@ -1,14 +1,9 @@
 package org.pirkaengine.form;
 
-import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.pirkaengine.form.exception.IllegalFormFormatException;
 import org.pirkaengine.form.field.BaseField;
-import org.pirkaengine.form.field.BooleanField;
 
 /**
  * フォームの基底クラス.
@@ -56,81 +51,5 @@ public abstract class BaseForm<E> {
      * </p>
      */
     protected void postinit() {
-    }
-    
-    /**
-     * フォームのインスタンスを生成する.
-     * <p>
-     * フォームに定義されたアノテーションから、
-     * 各フィールドの設定を行う。
-     * </p>
-     * @param formClass フォームのclassインスタンス
-     * @param request リクエスト
-     * @param <T> フォーム型
-     * @return フォームのインスタンス
-     */
-    public static <T extends BaseForm<?>> T newForm(Class<T> formClass, HttpServletRequest request) {
-        T form = newForm(formClass, false);
-        for (BaseField<?> field : form.fields) {
-            if (BooleanField.class.isInstance(field) && request.getParameter(field.getName()) == null) {
-                // Boolean Field ＝ Check Boxの場合、未チェックはパラメータで設定されない
-                continue;
-            }
-            field.setRawText(request.getParameter(field.getName()));
-        }
-        return form;
-    }
-
-    /**
-     * フォームのインスタンスを生成する.
-     * <p>
-     * フォームに定義されたアノテーションから、
-     * 各フィールドの設定を行う。
-     * </p>
-     * @param formClass フォームのclassインスタンス
-     * @param entity エンティティ
-     * @param <T> フォーム型
-     * @param <E> フォームのエンティティ型
-     * @return フォームのインスタンス
-     */
-    public static <T extends BaseForm<E>, E> T newForm(Class<T> formClass, E entity) {
-        T form = newForm(formClass, false);
-        form.fill(entity);
-        return form;
-    }
-
-    /**
-     * フォームのインスタンスを生成する.
-     * <p>
-     * フォームに定義されたアノテーションから、
-     * 各フィールドの設定を行う。
-     * </p>
-     * @param formClass フォームのclassインスタンス
-     * @param <T> フォーム型
-     * @return フォームのインスタンス
-     */
-    public static <T extends BaseForm<?>> T newForm(Class<T> formClass) {
-        return newForm(formClass, true);
-    }
-
-    static <T extends BaseForm<?>> T newForm(Class<T> formClass, boolean doPostinit) {
-        if (formClass == null) throw new IllegalArgumentException();
-        try {
-            T form = formClass.newInstance();
-            for (Field field : formClass.getFields()) {
-                if (!BaseField.class.isAssignableFrom(field.getType())) continue;
-                BaseField<?> fieldBase = (BaseField<?>) field.get(form);
-                if (fieldBase == null) throw new IllegalArgumentException(); // TODO
-                String name = field.getName();
-                fieldBase.apply(name, field.getDeclaredAnnotations());
-                form.fields.add(fieldBase);
-            }
-            if (doPostinit) form.postinit();
-            return form;
-        } catch (InstantiationException e) {
-            throw new IllegalFormFormatException(e);
-        } catch (IllegalAccessException e) {
-            throw new IllegalFormFormatException(e);
-        }
     }
 }

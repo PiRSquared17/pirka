@@ -21,13 +21,14 @@ public class RegexValidator extends ValidatorBase<String> {
      * @throws ValidatorFormatException 正規表現パターンが不正な場合
      */
     public RegexValidator(String regex) throws ValidatorFormatException {
+        if (regex == null) throw new ValidatorFormatException("RegexValidator: " + regex);
         try {
             this.pattern = Pattern.compile(regex);
         } catch (PatternSyntaxException e) {
             throw new ValidatorFormatException("RegexValidator: " + regex, e);
         }
     }
-    
+
     @Override
     protected boolean isValid(String value) {
         return pattern.matcher(value).matches();

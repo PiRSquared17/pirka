@@ -38,6 +38,15 @@ public class SelectEnumField<T extends Enum<T>> extends BaseField<T> {
         this.options = options;
         setValue(defaultValue);
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.form.field.BaseField#getFieldType()
+     */
+    @Override
+    public Class<T> getFieldType() {
+        return enumClass;
+    }
 
     /**
      * オプション項目を取得する.

@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.pirkaengine.form.FormMessage;
+import org.pirkaengine.form.ResourceBundleFormMessage;
 import org.pirkaengine.form.annotation.LabelImpl;
 import org.pirkaengine.form.annotation.RegexImpl;
 import org.pirkaengine.form.annotation.RequiredImpl;
@@ -18,15 +20,17 @@ import org.pirkaengine.form.validator.Validator;
 public class TextFieldTest {
 
     TextField target;
+    FormMessage formMessage;
 
     @Before
     public void setup() {
         target = new TextField();
+        formMessage = new ResourceBundleFormMessage();
     }
 
     @Test
     public void apply_Label() throws Exception {
-        target.apply("name", new LabelImpl("TextName"));
+        target.apply("name", formMessage, new LabelImpl("TextName"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("TextName"));
         assertThat(target.isRequired(), is(false));
@@ -35,7 +39,7 @@ public class TextFieldTest {
 
     @Test
     public void apply_Required() throws Exception {
-        target.apply("name", new RequiredImpl());
+        target.apply("name", formMessage,new RequiredImpl());
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(true));
@@ -44,7 +48,7 @@ public class TextFieldTest {
 
     @Test
     public void apply_StartWith() throws Exception {
-        target.apply("name", new StartWithImpl("/"));
+        target.apply("name", formMessage,new StartWithImpl("/"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(false));
@@ -54,7 +58,7 @@ public class TextFieldTest {
 
     @Test
     public void apply_Regex() throws Exception {
-        target.apply("html", new RegexImpl(".*\\.html"));
+        target.apply("html", formMessage,new RegexImpl(".*\\.html"));
         assertThat(target.name, is("html"));
         assertThat(target.label, is("html"));
         assertThat(target.isRequired(), is(false));
@@ -64,7 +68,7 @@ public class TextFieldTest {
     
     @Test
     public void apply_UriUsable() throws Exception {
-        target.apply("name", new UriUsableImpl());
+        target.apply("name", formMessage,new UriUsableImpl());
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.validators.size(), is(1));
