@@ -53,19 +53,18 @@ public class TextField extends BaseField<String> {
         Class<? extends Annotation> type = anno.annotationType();
         ValidatorBase<String> validator = null;
         if (type == StartWith.class) {
-            validator = new StartWithValidator(StartWith.class.cast(anno).value());
+            return StartWithValidator.create(message, StartWith.class.cast(anno));
         } else if (type == Regex.class) {
-            validator = new RegexValidator(Regex.class.cast(anno).value());
+            return RegexValidator.create(message, Regex.class.cast(anno));
         } else if (type == UriUsable.class) {
-            validator = new UriUsableValidator();
+            return UriUsableValidator.create(message, UriUsable.class.cast(anno));
         }
         if (validator != null) {
-            validator.setFormMessage(message);
             return validator;
         }
         return super.getValidator(message, anno);
     }
-    
+
     /*
      * (non-Javadoc)
      * @see org.pirkaengine.form.field.BaseField#convert(java.lang.String)
