@@ -35,6 +35,7 @@ public abstract class BaseField<T> {
     protected final List<String> errors = new LinkedList<String>();
     /** FormMessage */
     protected FormMessage message = FormMessage.NULL_MESSAGE;
+    String requiredMessageKey = "validator.required";
 
     /**
      * フィールドの型を返す.
@@ -77,6 +78,10 @@ public abstract class BaseField<T> {
             Class<?> type = anno.annotationType();
             if (type == Required.class) {
                 this.setRequired(true);
+                String messageKey = Required.class.cast(anno).messageKey();
+                if (messageKey != null && !messageKey.isEmpty()) {
+                    this.requiredMessageKey = messageKey;
+                }
             } else if (type == Label.class) {
                 String anoLabel = ((Label) anno).value();
                 this.label = aMessage.getFormMessage(anoLabel);
@@ -106,7 +111,7 @@ public abstract class BaseField<T> {
      */
     public boolean clean() {
         if (isRequired() && isEmptyValue()) {
-            errors.add(message.getFormMessage("validator.required", this.label));
+            errors.add(message.getFormMessage(requiredMessageKey, this.label));
             return false;
         }
         try {

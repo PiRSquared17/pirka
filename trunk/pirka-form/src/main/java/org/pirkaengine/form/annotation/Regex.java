@@ -15,4 +15,7 @@ import java.lang.annotation.Target;
 public @interface Regex {
     /** 設定値 */
     String value();
+
+    /** メッセージキー */
+    String messageKey() default "";
 }

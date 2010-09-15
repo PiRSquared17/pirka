@@ -15,4 +15,6 @@ import java.lang.annotation.Target;
 public @interface StartWith {
     /** 設定値 */
     String value();
+    /** メッセージキー */
+    String messageKey() default "";
 }

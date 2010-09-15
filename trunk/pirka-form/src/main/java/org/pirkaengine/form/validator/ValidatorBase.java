@@ -13,6 +13,17 @@ public abstract class ValidatorBase<T> implements Validator<T> {
     
     /** FormMessage */
     protected FormMessage formMessage = FormMessage.NULL_MESSAGE;
+    /** messageKey */
+    protected final String messageKey;
+    
+    /**
+     * Constructor.
+     * @param messageKey メッセージキー
+     */
+    public ValidatorBase(String messageKey) {
+        if (messageKey == null) throw new IllegalArgumentException("messageKey is null.");
+        this.messageKey = messageKey;
+    }
     
     /**
      * フォームメッセージを設定する
@@ -49,7 +60,9 @@ public abstract class ValidatorBase<T> implements Validator<T> {
      * メッセージのキーを取得する.
      * @return メッセージキー
      */
-    protected abstract String getMessageKey();
+    protected final String getMessageKey() {
+        return messageKey;
+    }
 
     /**
      * 値の妥当性をチェックする
