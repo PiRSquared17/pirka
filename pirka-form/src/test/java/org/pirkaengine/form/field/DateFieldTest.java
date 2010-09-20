@@ -1,17 +1,22 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
 
-
 import org.junit.Test;
 import org.pirkaengine.form.exception.ConvertException;
-import org.pirkaengine.form.field.DateField;
 
 public class DateFieldTest {
     DateField target;
+
+    @Test
+    public void getFieldType() throws Exception {
+        target = new DateField();
+        assertThat(target.getFieldType(), is(sameInstance(Date.class)));
+    }
 
     @Test
     public void convert() {
@@ -113,7 +118,7 @@ public class DateFieldTest {
     public void toString_null_pattern() {
         target = new DateField((String) null);
     }
-    
+
     @Test
     public void default_value() {
         target = new DateField(dateOf(2009, 12, 30));

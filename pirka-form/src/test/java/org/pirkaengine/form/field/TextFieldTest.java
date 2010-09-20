@@ -29,6 +29,11 @@ public class TextFieldTest {
     }
 
     @Test
+    public void getFieldType() throws Exception {
+        assertThat(target.getFieldType(), is(sameInstance(String.class)));
+    }
+
+    @Test
     public void apply_Label() throws Exception {
         target.apply("name", formMessage, new LabelImpl("TextName"));
         assertThat(target.name, is("name"));
@@ -39,7 +44,7 @@ public class TextFieldTest {
 
     @Test
     public void apply_Required() throws Exception {
-        target.apply("name", formMessage,new RequiredImpl());
+        target.apply("name", formMessage, new RequiredImpl());
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(true));
@@ -49,17 +54,17 @@ public class TextFieldTest {
 
     @Test
     public void apply_Required_messageKey() throws Exception {
-        target.apply("name", formMessage,new RequiredImpl("custom_message"));
+        target.apply("name", formMessage, new RequiredImpl("custom_message"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(true));
         assertThat(target.validators.size(), is(0));
         assertThat(target.requiredMessageKey, is("custom_message"));
     }
-    
+
     @Test
     public void apply_StartWith() throws Exception {
-        target.apply("name", formMessage,new StartWithImpl("/"));
+        target.apply("name", formMessage, new StartWithImpl("/"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(false));
@@ -69,52 +74,52 @@ public class TextFieldTest {
 
     @Test
     public void apply_StartWith_messageKey() throws Exception {
-        target.apply("name", formMessage,new StartWithImpl("/", "custom_message"));
+        target.apply("name", formMessage, new StartWithImpl("/", "custom_message"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.isRequired(), is(false));
         assertThat(target.validators.size(), is(1));
         assertThat(target.validators.get(0), is((Validator<String>) new StartWithValidator("/", "custom_message")));
     }
-    
+
     @Test
     public void apply_Regex() throws Exception {
-        target.apply("html", formMessage,new RegexImpl(".*\\.html"));
+        target.apply("html", formMessage, new RegexImpl(".*\\.html"));
         assertThat(target.name, is("html"));
         assertThat(target.label, is("html"));
         assertThat(target.isRequired(), is(false));
         assertThat(target.validators.size(), is(1));
         assertThat(target.validators.get(0), is((Validator<String>) new RegexValidator(".*\\.html")));
     }
-    
+
     @Test
     public void apply_Regex_messageKey() throws Exception {
-        target.apply("html", formMessage,new RegexImpl(".*\\.html", "custom_key"));
+        target.apply("html", formMessage, new RegexImpl(".*\\.html", "custom_key"));
         assertThat(target.name, is("html"));
         assertThat(target.label, is("html"));
         assertThat(target.isRequired(), is(false));
         assertThat(target.validators.size(), is(1));
         assertThat(target.validators.get(0), is((Validator<String>) new RegexValidator(".*\\.html", "custom_key")));
     }
-    
+
     @Test
     public void apply_UriUsable() throws Exception {
-        target.apply("name", formMessage,new UriUsableImpl());
+        target.apply("name", formMessage, new UriUsableImpl());
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.validators.size(), is(1));
         assertThat(target.validators.get(0), is((Validator<String>) new UriUsableValidator()));
     }
-    
+
     @Test
     public void apply_UriUsable_messageKey() throws Exception {
-        target.apply("name", formMessage,new UriUsableImpl("custom_key"));
+        target.apply("name", formMessage, new UriUsableImpl("custom_key"));
         assertThat(target.name, is("name"));
         assertThat(target.label, is("name"));
         assertThat(target.validators.size(), is(1));
         assertThat(target.validators.get(0), is((Validator<String>) new UriUsableValidator("custom_key")));
     }
-    
+
     @Test
     public void convert() {
         assertEquals("Hello", target.convert("Hello"));

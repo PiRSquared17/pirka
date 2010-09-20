@@ -1,11 +1,11 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.pirkaengine.form.exception.ConvertException;
-import org.pirkaengine.form.field.SelectEnumField;
 
 public class SelectEnumFieldTest {
     SelectEnumField<Options> target;
@@ -16,9 +16,14 @@ public class SelectEnumFieldTest {
     
     @Before
     public void setup() {
-        target = new SelectEnumField(Options.class, Options.values());
+        target = new SelectEnumField<Options>(Options.class, Options.values());
     }
 
+    @Test
+    public void getFieldType() throws Exception {
+        assertThat(target.getFieldType(), is(sameInstance(Options.class)));
+    }
+    
     @Test
     public void convert() {
         assertSame(Options.A, target.convert("A"));
@@ -55,12 +60,12 @@ public class SelectEnumFieldTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void toString_arg0_null() {
-        new SelectEnumField(null, Options.values());
+        new SelectEnumField<Options>(null, Options.values());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void toString_arg1_null() {
-        new SelectEnumField(Options.class, null);
+        new SelectEnumField<Options>(Options.class, null);
     }
 
     @Test

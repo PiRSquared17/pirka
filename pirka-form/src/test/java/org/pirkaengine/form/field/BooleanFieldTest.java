@@ -1,11 +1,11 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.pirkaengine.form.exception.ConvertException;
-
 
 public class BooleanFieldTest {
     BooleanField target;
@@ -13,6 +13,11 @@ public class BooleanFieldTest {
     @Before
     public void setup() {
         target = new BooleanField();
+    }
+
+    @Test
+    public void getFieldType() throws Exception {
+        assertThat(target.getFieldType(), is(sameInstance(Boolean.class)));
     }
 
     @Test
@@ -29,6 +34,5 @@ public class BooleanFieldTest {
         assertEquals("true", target.toString(Boolean.TRUE));
         assertEquals("false", target.toString(Boolean.FALSE));
     }
-
 
 }
