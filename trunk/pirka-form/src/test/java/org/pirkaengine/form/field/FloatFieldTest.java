@@ -1,11 +1,11 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.pirkaengine.form.exception.ConvertException;
-import org.pirkaengine.form.field.FloatField;
 
 public class FloatFieldTest {
     FloatField target;
@@ -13,6 +13,11 @@ public class FloatFieldTest {
     @Before
     public void setup() {
         target = new FloatField();
+    }
+
+    @Test
+    public void getFieldType() throws Exception {
+        assertThat(target.getFieldType(), is(sameInstance(Float.class)));
     }
 
     @Test

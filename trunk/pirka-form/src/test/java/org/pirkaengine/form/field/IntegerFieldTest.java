@@ -1,5 +1,6 @@
 package org.pirkaengine.form.field;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -15,6 +16,11 @@ public class IntegerFieldTest {
         target = new IntegerField();
     }
 
+    @Test
+    public void getFieldType() throws Exception {
+        assertThat(target.getFieldType(), is(sameInstance(Integer.class)));
+    }
+    
     @Test
     public void convert() {
         assertEquals(Integer.valueOf(200), target.convert("200"));
