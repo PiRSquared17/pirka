@@ -6,17 +6,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * URLに利用可能な文字列フィールドに付与するアノテーション.
- * <p>
- * 英数字,.~$!*';:@=&+を許可する
- * </p>
- * [\\w-\\./~,$!\\*';:@=&+]
+ * 浮動小数点数の範囲を指定するアノテーション。
  * @author shuji.w6e
  * @since 0.1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface UriUsable {
+public @interface RangeFloat {
+    /** 最小値（デフォルト0） */
+    float min() default 0f;
+
+    /** 最大値（デフォルト100） */
+    float max() default 1f;
+
     /** メッセージキー */
     String messageKey() default "";
 }

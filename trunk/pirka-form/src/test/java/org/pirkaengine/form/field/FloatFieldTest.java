@@ -5,14 +5,22 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.pirkaengine.form.FormMessage;
+import org.pirkaengine.form.ResourceBundleFormMessage;
+import org.pirkaengine.form.annotation.RangeFloatImpl;
+import org.pirkaengine.form.annotation.RequiredImpl;
 import org.pirkaengine.form.exception.ConvertException;
+import org.pirkaengine.form.validator.RangeFloatValidator;
+import org.pirkaengine.form.validator.Validator;
 
 public class FloatFieldTest {
     FloatField target;
+    FormMessage formMessage;
 
     @Before
     public void setup() {
         target = new FloatField();
+        formMessage = new ResourceBundleFormMessage();
     }
 
     @Test
@@ -79,5 +87,46 @@ public class FloatFieldTest {
         target = new FloatField(10.2f);
         assertEquals(Float.valueOf(10.2f), target.getValue());
         assertEquals("10.2", target.getRawText());
+    }
+    
+    @Test
+    public void apply_Required() throws Exception {
+        target.apply("name", formMessage, new RequiredImpl());
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(true));
+        assertThat(target.validators.size(), is(0));
+        assertThat(target.requiredMessageKey, is("validator.required"));
+    }
+
+    @Test
+    public void apply_Required_messageKey() throws Exception {
+        target.apply("name", formMessage, new RequiredImpl("custom_message"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(true));
+        assertThat(target.validators.size(), is(0));
+        assertThat(target.requiredMessageKey, is("custom_message"));
+    }
+
+    @Test
+    public void apply_RangeFloat() throws Exception {
+        target.apply("name", formMessage, new RangeFloatImpl(1f, 10f));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0), is((Validator<Float>) new RangeFloatValidator(1, 10)));
+    }
+
+    @Test
+    public void apply_RangeFloat_messageKey() throws Exception {
+        target.apply("name", formMessage, new RangeFloatImpl(0f, 100f, "custom_message"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0),
+                is((Validator<Float>) new RangeFloatValidator(0f, 100f, "custom_message")));
     }
 }
