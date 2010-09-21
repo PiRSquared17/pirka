@@ -1,6 +1,13 @@
 package org.pirkaengine.form.field;
 
+import java.lang.annotation.Annotation;
+
+import org.pirkaengine.form.FormMessage;
+import org.pirkaengine.form.annotation.RangeFloat;
 import org.pirkaengine.form.exception.ConvertException;
+import org.pirkaengine.form.validator.RangeFloatValidator;
+import org.pirkaengine.form.validator.Validator;
+import org.pirkaengine.form.validator.ValidatorBase;
 
 /**
  * 小数型フィールド.
@@ -41,6 +48,19 @@ public class FloatField extends BaseField<Float> {
         } catch (NumberFormatException e) {
             throw new ConvertException(e);
         }
+    }
+    
+    @Override
+    protected Validator<Float> getValidator(FormMessage message, Annotation anno) {
+        Class<? extends Annotation> type = anno.annotationType();
+        ValidatorBase<Float> validator = null;
+        if (type == RangeFloat.class) {
+            validator = RangeFloatValidator.create(message, RangeFloat.class.cast(anno));
+        }
+        if (validator != null) {
+            return validator;
+        }
+        return super.getValidator(message, anno);
     }
 
     /*

@@ -1,6 +1,13 @@
 package org.pirkaengine.form.field;
 
+import java.lang.annotation.Annotation;
+
+import org.pirkaengine.form.FormMessage;
+import org.pirkaengine.form.annotation.RangeInteger;
 import org.pirkaengine.form.exception.ConvertException;
+import org.pirkaengine.form.validator.RangeIntegerValidator;
+import org.pirkaengine.form.validator.Validator;
+import org.pirkaengine.form.validator.ValidatorBase;
 
 /**
  * 整数型フィールド.
@@ -41,6 +48,19 @@ public class IntegerField extends BaseField<Integer> {
         } catch (NumberFormatException e) {
             throw new ConvertException(e);
         }
+    }
+
+    @Override
+    protected Validator<Integer> getValidator(FormMessage message, Annotation anno) {
+        Class<? extends Annotation> type = anno.annotationType();
+        ValidatorBase<Integer> validator = null;
+        if (type == RangeInteger.class) {
+            validator = RangeIntegerValidator.create(message, RangeInteger.class.cast(anno));
+        }
+        if (validator != null) {
+            return validator;
+        }
+        return super.getValidator(message, anno);
     }
 
     /*
