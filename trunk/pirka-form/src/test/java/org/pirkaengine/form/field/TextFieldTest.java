@@ -9,6 +9,7 @@ import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.ResourceBundleFormMessage;
 import org.pirkaengine.form.annotation.LabelImpl;
 import org.pirkaengine.form.annotation.RegexImpl;
+import org.pirkaengine.form.annotation.Required;
 import org.pirkaengine.form.annotation.RequiredImpl;
 import org.pirkaengine.form.annotation.StartWithImpl;
 import org.pirkaengine.form.annotation.UriUsableImpl;

@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <properties>
-    <app.version>0.1.0-SNAPSHOT</app.version>
+    <app.version>0.1.0</app.version>
     <t2.version>0.6.3-ga</t2.version>
   </properties>
   <modelVersion>4.0.0</modelVersion>
@@ -71,6 +71,16 @@
       </plugin>
     </plugins>
   </build>
+  <distributionManagement>
+    <repository>
+      <id>repo</id>
+      <url>file:///Users/shuji/.m2/repository</url>
+    </repository>
+    <snapshotRepository>
+      <id>repo</id>
+      <url>file:///Users/shuji/.m2/repository</url>
+    </snapshotRepository>
+  </distributionManagement>
   <reporting>
     <plugins>
       <plugin>
