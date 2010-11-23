@@ -3,6 +3,7 @@ package org.pirkaengine.form.field;
 import java.lang.annotation.Annotation;
 
 import org.pirkaengine.form.FormMessage;
+import org.pirkaengine.form.annotation.EndWith;
 import org.pirkaengine.form.annotation.Regex;
 import org.pirkaengine.form.annotation.Regex1;
 import org.pirkaengine.form.annotation.Regex2;
@@ -15,6 +16,7 @@ import org.pirkaengine.form.annotation.Regex8;
 import org.pirkaengine.form.annotation.Regex9;
 import org.pirkaengine.form.annotation.StartWith;
 import org.pirkaengine.form.annotation.UriUsable;
+import org.pirkaengine.form.validator.EndWithValidator;
 import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 import org.pirkaengine.form.validator.UriUsableValidator;
@@ -63,6 +65,8 @@ public class TextField extends BaseField<String> {
         ValidatorBase<String> validator = null;
         if (type == StartWith.class) {
             return StartWithValidator.create(message, StartWith.class.cast(anno));
+        } else if (type == EndWith.class) {
+            return EndWithValidator.create(message, EndWith.class.cast(anno));
         } else if (type == Regex.class) {
             return RegexValidator.create(message, Regex.class.cast(anno));
         } else if (type == Regex1.class) {

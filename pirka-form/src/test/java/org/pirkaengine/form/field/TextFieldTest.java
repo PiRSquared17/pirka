@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.ResourceBundleFormMessage;
+import org.pirkaengine.form.annotation.EndWithImpl;
 import org.pirkaengine.form.annotation.LabelImpl;
 import org.pirkaengine.form.annotation.RegexImpl;
 import org.pirkaengine.form.annotation.RegexImpl1;
@@ -21,6 +22,7 @@ import org.pirkaengine.form.annotation.RegexImpl9;
 import org.pirkaengine.form.annotation.RequiredImpl;
 import org.pirkaengine.form.annotation.StartWithImpl;
 import org.pirkaengine.form.annotation.UriUsableImpl;
+import org.pirkaengine.form.validator.EndWithValidator;
 import org.pirkaengine.form.validator.RegexValidator;
 import org.pirkaengine.form.validator.StartWithValidator;
 import org.pirkaengine.form.validator.UriUsableValidator;
@@ -91,6 +93,26 @@ public class TextFieldTest {
         assertThat(target.validators.get(0), is((Validator<String>) new StartWithValidator("/", "custom_message")));
     }
 
+    @Test
+    public void apply_EndWith() throws Exception {
+        target.apply("name", formMessage, new EndWithImpl("/"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0), is((Validator<String>) new EndWithValidator("/")));
+    }
+
+    @Test
+    public void apply_EndWith_messageKey() throws Exception {
+        target.apply("name", formMessage, new EndWithImpl("/", "custom_message"));
+        assertThat(target.name, is("name"));
+        assertThat(target.label, is("name"));
+        assertThat(target.isRequired(), is(false));
+        assertThat(target.validators.size(), is(1));
+        assertThat(target.validators.get(0), is((Validator<String>) new EndWithValidator("/", "custom_message")));
+    }    
+    
     @Test
     public void apply_Regex() throws Exception {
         target.apply("html", formMessage, new RegexImpl(".*\\.html"));
