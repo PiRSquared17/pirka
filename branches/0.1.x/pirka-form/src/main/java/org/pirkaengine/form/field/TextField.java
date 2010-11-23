@@ -4,6 +4,15 @@ import java.lang.annotation.Annotation;
 
 import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.annotation.Regex;
+import org.pirkaengine.form.annotation.Regex1;
+import org.pirkaengine.form.annotation.Regex2;
+import org.pirkaengine.form.annotation.Regex3;
+import org.pirkaengine.form.annotation.Regex4;
+import org.pirkaengine.form.annotation.Regex5;
+import org.pirkaengine.form.annotation.Regex6;
+import org.pirkaengine.form.annotation.Regex7;
+import org.pirkaengine.form.annotation.Regex8;
+import org.pirkaengine.form.annotation.Regex9;
 import org.pirkaengine.form.annotation.StartWith;
 import org.pirkaengine.form.annotation.UriUsable;
 import org.pirkaengine.form.validator.RegexValidator;
@@ -56,6 +65,24 @@ public class TextField extends BaseField<String> {
             return StartWithValidator.create(message, StartWith.class.cast(anno));
         } else if (type == Regex.class) {
             return RegexValidator.create(message, Regex.class.cast(anno));
+        } else if (type == Regex1.class) {
+            return RegexValidator.create(message, Regex1.class.cast(anno));
+        } else if (type == Regex2.class) {
+            return RegexValidator.create(message, Regex2.class.cast(anno));
+        } else if (type == Regex3.class) {
+            return RegexValidator.create(message, Regex3.class.cast(anno));
+        } else if (type == Regex4.class) {
+            return RegexValidator.create(message, Regex4.class.cast(anno));
+        } else if (type == Regex5.class) {
+            return RegexValidator.create(message, Regex5.class.cast(anno));
+        } else if (type == Regex6.class) {
+            return RegexValidator.create(message, Regex6.class.cast(anno));
+        } else if (type == Regex7.class) {
+            return RegexValidator.create(message, Regex7.class.cast(anno));
+        } else if (type == Regex8.class) {
+            return RegexValidator.create(message, Regex8.class.cast(anno));
+        } else if (type == Regex9.class) {
+            return RegexValidator.create(message, Regex9.class.cast(anno));
         } else if (type == UriUsable.class) {
             return UriUsableValidator.create(message, UriUsable.class.cast(anno));
         }

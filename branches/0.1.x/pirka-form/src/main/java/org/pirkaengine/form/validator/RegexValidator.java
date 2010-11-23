@@ -5,6 +5,15 @@ import java.util.regex.PatternSyntaxException;
 
 import org.pirkaengine.form.FormMessage;
 import org.pirkaengine.form.annotation.Regex;
+import org.pirkaengine.form.annotation.Regex1;
+import org.pirkaengine.form.annotation.Regex2;
+import org.pirkaengine.form.annotation.Regex3;
+import org.pirkaengine.form.annotation.Regex4;
+import org.pirkaengine.form.annotation.Regex5;
+import org.pirkaengine.form.annotation.Regex6;
+import org.pirkaengine.form.annotation.Regex7;
+import org.pirkaengine.form.annotation.Regex8;
+import org.pirkaengine.form.annotation.Regex9;
 import org.pirkaengine.form.exception.ValidatorFormatException;
 
 /**
@@ -49,8 +58,107 @@ public class RegexValidator extends ValidatorBase<String> {
      * @return Validator
      */
     public static RegexValidator create(FormMessage message, Regex anno) {
-        String value = anno.value();
-        String msgKey = anno.messageKey();
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex1 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex2 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex3 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex4 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex5 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex6 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex7 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex8 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param anno Regexアノテーション
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, Regex9 anno) {
+        return create(message, anno.value(), anno.messageKey());
+    }
+
+    /**
+     * アノテーションを指定してRegexValidatorインスタンスを生成する
+     * @param message FormMessage
+     * @param value value
+     * @param msgKey message key
+     * @return Validator
+     */
+    public static RegexValidator create(FormMessage message, String value, String msgKey) {
         RegexValidator validator;
         if (msgKey == null || msgKey.isEmpty()) {
             validator = new RegexValidator(value);
