@@ -16,21 +16,17 @@ import org.pirkaengine.core.parser.LineBreak;
 
 public class TestUtil {
 
-    public static void assertRenderEquals(String templateName, StringBuffer actual) {
-        assertRenderEquals(templateName, actual, "html");
-    }
-
-    public static void assertRenderEquals(String templateName, StringBuffer actual, String suffix) {
-        assertRenderEquals(templateName, actual.toString(), suffix);
-    }
-
     public static void assertRenderEquals(String templateName, String actual) {
-        assertRenderEquals( templateName, actual, "html");
+        assertRenderEquals( templateName, actual, "html", "UTF-8");
     }
 
     public static void assertRenderEquals(String templateName, String actual, String suffix) {
+        assertRenderEquals( templateName, actual, suffix, "UTF-8");
+    }
+    
+    public static void assertRenderEquals(String templateName, String actual, String suffix, String charset) {
         debug(actual);
-        String[] expectedLines = loadExpected(templateName, suffix);
+        String[] expectedLines = loadExpected(templateName, suffix, charset);
         String[] actualLines = getLines(actual);
         StringBuffer errorMsg = new StringBuffer();
         if (expectedLines.length != actualLines.length) {
@@ -69,11 +65,11 @@ public class TestUtil {
         }
     }
 
-    public static String[] loadExpected(String templateName, String suffix) {
+    public static String[] loadExpected(String templateName, String suffix, String charset) {
         LineNumberReader reader = null;
         try {
             File file = new File("testdata/" + getExpectedFileName(templateName, suffix));
-            reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), charset));
             List<String> lines = new ArrayList<String>();
             String line = null;
             while ((line = reader.readLine()) != null) {

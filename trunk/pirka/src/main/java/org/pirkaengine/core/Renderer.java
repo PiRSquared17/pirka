@@ -21,12 +21,19 @@ public interface Renderer {
 
     /**
      * テンプレートの評価結果を出力ストリームに書き出す.
-     * 
-     * TODO 現状は文字コードはUTF-8固定
      * @param output 出力ストリーム
      * @throws RenderException レンダリングに失敗した場合
      */
     void render(OutputStream output) throws RenderException;
+    
+    /**
+     * 文字コードを指定して、テンプレートの評価結果を出力ストリームに書き出す.
+     * @param output 出力ストリーム
+     * @param charset 文字コード
+     * @throws RenderException レンダリングに失敗した場合
+     * @since 0.2.0
+     */
+    void render(OutputStream output, String charset) throws RenderException;
 
     /**
      * テンプレートの評価結果をwriterに書き出す.

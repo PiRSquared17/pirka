@@ -96,8 +96,7 @@ public class TemplateBuilder {
     private XhtmlStruct parse(File file) throws ParseException, FileNotFoundException {
         try {
             XmlParser parser = new StAXXmlParser();
-            // TODO Charset
-            return parser.parse(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            return parser.parse(new InputStreamReader(new FileInputStream(file), loader.getCharset()));
         } catch (UnsupportedEncodingException e) {
             throw new ParseException(e);
         }

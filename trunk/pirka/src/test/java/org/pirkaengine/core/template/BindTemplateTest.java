@@ -1,6 +1,6 @@
 package org.pirkaengine.core.template;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,18 +9,15 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import org.junit.Before;
 import org.junit.Test;
+import org.pirkaengine.core.RenderException;
 import org.pirkaengine.core.expression.Function;
-import org.pirkaengine.core.template.BindTemplate;
-import org.pirkaengine.core.template.TextNode;
-import org.pirkaengine.core.template.XhtmlTemplate;
 
 /**
  * BindTemplateのテスト
- * @author shuji
- * @since 0.1
+ * @author shuji.w6e
+ * @since 0.1.0
  */
 public class BindTemplateTest {
 
@@ -65,6 +62,54 @@ public class BindTemplateTest {
     }
 
     /**
+     * renderテスト(MS932).
+     */
+    @Test
+    public void render_outputstream_MS932() {
+        final StringBuffer buf = new StringBuffer();
+        OutputStream output = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                byte[] bytes = new byte[] { (byte) b };
+                buf.append(new String(bytes, "MS932"));
+            }
+        };
+        target.render(output, "MS932");
+        assertEquals(TEXT, buf.toString());
+    }
+
+    /**
+     * renderテスト.
+     */
+    @Test
+    public void render_outputstream_EUC_JP() {
+        final StringBuffer buf = new StringBuffer();
+        OutputStream output = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                byte[] bytes = new byte[] { (byte) b };
+                buf.append(new String(bytes, "EUC-JP"));
+            }
+        };
+        target.render(output, "EUC-JP");
+        assertEquals(TEXT, buf.toString());
+    }
+
+    /**
+     * renderテスト.
+     */
+    @Test(expected = RenderException.class)
+    public void render_IOException() {
+        OutputStream output = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                throw new IOException();
+            }
+        };
+        target.render(output);
+    }
+
+    /**
      * renderテスト.
      */
     @Test
@@ -73,7 +118,7 @@ public class BindTemplateTest {
         target.render(writer);
         assertEquals(TEXT, writer.toString());
     }
-    
+
     /**
      * renderテスト.
      */
@@ -82,6 +127,7 @@ public class BindTemplateTest {
         OutputStream output = null;
         target.render(output);
     }
+
     /**
      * renderテスト.
      */
