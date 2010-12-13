@@ -23,6 +23,8 @@ public class PirkaLoader {
     final PirkaContext context;
     /** CacheManager */
     final CacheManager cacheManager;
+    /** charset */
+    volatile String charset = "UTF-8";
 
     private static volatile Factory FACTORY = new Factory() {
         /*
@@ -161,11 +163,27 @@ public class PirkaLoader {
         Template template = builder.build(templateFileName, file);
         return template;
     }
+    
+    /**
+     * 文字コードを取得する
+     * @param charset 文字コード
+     */
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
+    
+    /**
+     * 文字コードを取得する
+     * @return 文字コード
+     */
+    public String getCharset() {
+        return this.charset;
+    }
 
     /**
      * ファクトリインターフェイス.
-     * @author shuji
-     * @since 1.0
+     * @author shuji.w6e
+     * @since 0.1.0
      */
     public static interface Factory {
         /**

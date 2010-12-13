@@ -70,10 +70,14 @@ public class BindTemplate implements Renderer {
      */
     @Override
     public void render(OutputStream output) throws RenderException {
+        render(output, "UTF-8");
+    }
+    
+    public void render(OutputStream output, String charset) throws RenderException {
         if (output == null) throw new IllegalArgumentException("output is null.");
         Writer writer = null;
         try {
-            writer = new OutputStreamWriter(output, "UTF-8");
+            writer = new OutputStreamWriter(output, charset);
             writeTemplate(writer);
         } catch (IOException e) {
             error("Rendering Error: " + this.template.templateName, e);
