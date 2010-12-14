@@ -1,13 +1,8 @@
 package org.pirkaengine.core;
 
-import static org.junit.Assert.assertEquals;
 import static org.pirkaengine.core.TestUtil.*;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.pirkaengine.core.PirkaLoadException;
-import org.pirkaengine.core.Template;
-import org.pirkaengine.core.TemplateNotFoundException;
 import org.pirkaengine.core.parser.ParseException;
 
 public class RenderTest_expression extends RenderTest {

@@ -375,6 +375,14 @@ public class StAXXmlParser implements XmlParser {
                     PrkElement.REPLACE.name,
                     value).build());
                 depth.nest();
+            } else if (localName.equals(PrkElement.FOR.name)) { // <prk:for>
+                String value = find("loop");
+                if (value == null) throw new ParseException("loop is not found in prk:for");
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START).append(
+                        PrkElement.FOR.name,
+                        value).build());
+                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                depth.nest();
             } else if (localName.equals(PrkElement.INCLUDE.name)) { // <prk:include
                 // file="..."
                 // >

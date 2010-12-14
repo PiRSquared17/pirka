@@ -105,12 +105,12 @@ public class LoopNode extends CompositeNode {
         int index = 0;
         for (Object item : getIterable(model, functions)) {
             model.put(itemName, item);
-            buf.append(startTagNode.getText(model, functions));
+            if (!startTagNode.isPrkTag()) buf.append(startTagNode.getText(model, functions));
             if (indexName != null) model.put(indexName, index);
             for (Node node : nodes) {
                 buf.append(node.getText(model, functions));
             }
-            buf.append(endTagNode.getText(model, functions));
+            if (!endTagNode.isPrkTag()) buf.append(endTagNode.getText(model, functions));
             index++;
         }
         model.remove(itemName);
