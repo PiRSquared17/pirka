@@ -618,6 +618,23 @@ public class StAXXmlParserTest {
 						Fragment.create(0, Fragment.Type.TEXT).build())));
 		assertThat(actual.getText().toString(), is(text));
 	}
+	
+	   @Test
+	    public void parse_prk_for() throws ParseException {
+	        String text = "<html xmlns:prk=\"http://www.pirkaengine.org\"><prk:for loop=\"item in items\"><span>XXX</span></prk:for></html>";
+	        XhtmlStruct actual = target.parse(getInput(text));
+	        assertThat(
+	                actual.getFragments(),
+	                is(expected(
+	                        Fragment.create(101, Fragment.Type.TEXT).build(),
+	                        Fragment.create(91, Fragment.Type.TAG_END).build(),
+	                        Fragment.create(75, Fragment.Type.TEXT).build(),
+	                        Fragment.create(45, Fragment.Type.TAG_START)
+	                                .append(PrkAttribute.FOR.name, "item in items").build(),
+	                        Fragment.create(0, Fragment.Type.TEXT).build())));
+	        assertThat(actual.getText().toString(), is(text));
+	    }
+
 
 	private StringReader getInput(String text) {
 		return new StringReader(text);

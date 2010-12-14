@@ -19,7 +19,7 @@ public class RenderTest_noDocType extends RenderTest {
      * @throws TemplateNotFoundException
      */
     @Test
-    public void render_prk_attr_class() throws ParseException, PirkaLoadException, TemplateNotFoundException {
+    public void render_no_DocType() throws ParseException, PirkaLoadException, TemplateNotFoundException {
         String templateName = "NoDocType";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         viewModel.put("text", "置換されました。");

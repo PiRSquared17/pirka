@@ -11,6 +11,8 @@ public enum PrkElement {
     DEF("def"),
     /** prk:replace */
     REPLACE("replace"),
+    /** prk:for */
+    FOR("for"),
     /** prk:component */
     COMPONENT("component"),
     /** prk:param */

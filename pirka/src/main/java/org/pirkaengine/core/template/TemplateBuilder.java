@@ -274,6 +274,7 @@ public class TemplateBuilder {
 
     /** タグからprk属性を除去したタグを返す. */
     private String getTagText(String str) {
+        if (str.startsWith("<prk")) return str;
         int from = str.indexOf(PrkNameSpace.PREFIX) - 1;
         if (from < 0) return str;
         int to = str.indexOf('"', from);

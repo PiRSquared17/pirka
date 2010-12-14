@@ -22,7 +22,7 @@ public class RenderTest_stub extends RenderTest {
      * @throws TemplateNotFoundException
      */
     @Test
-    public void render_Mock() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
+    public void render_Stub() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
         String templateName = "Stub";
         Template tmpl = loader.load(getTemplateFileName(templateName));
         String actual = tmpl.generate().render();
