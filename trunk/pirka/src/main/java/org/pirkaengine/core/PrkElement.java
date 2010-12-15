@@ -17,6 +17,8 @@ public enum PrkElement {
     COMPONENT("component"),
     /** prk:param */
     PARAM("param"),
+    /** prk:val */
+    VAL("val"),
     /** prk:include */
     INCLUDE("include"),
     /** prk:functions */

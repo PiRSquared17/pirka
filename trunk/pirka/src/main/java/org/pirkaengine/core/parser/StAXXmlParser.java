@@ -23,7 +23,6 @@ import org.pirkaengine.core.PrkNameSpace;
 import org.pirkaengine.core.parser.Fragment.Attribute;
 import org.pirkaengine.core.parser.Fragment.Builder;
 
-
 /**
  * StAXXmlParser.
  * <p>
@@ -83,9 +82,8 @@ public class StAXXmlParser implements XmlParser {
                         fragments.removeLast();
                         String prkKey = fragment.prkKey == null ? PrkAttribute.ATTR.name : fragment.prkKey;
                         String prkValue = fragment.prkValue == null ? PrkAttribute.ATTR.name : fragment.prkValue;
-                        fragments.add(Fragment.create(fragment.offset, Fragment.Type.TAG_EMPTY_ELEMENTS).append(
-                            prkKey,
-                            prkValue).copy(fragment).build());
+                        fragments.add(Fragment.create(fragment.offset, Fragment.Type.TAG_EMPTY_ELEMENTS)
+                                .append(prkKey, prkValue).copy(fragment).build());
                     }
                     continue;
                 }
@@ -213,9 +211,9 @@ public class StAXXmlParser implements XmlParser {
                     continue;
                 }
                 if (localAttrName.equals(PrkAttribute.ATTR.name)) throw new ParseException(
-                    "prk:attr must has attr_name: prk:attr.attr_name");
+                        "prk:attr must has attr_name: prk:attr.attr_name");
                 if (localAttrName.equals(PrkAttribute.PATH.name)) throw new ParseException(
-                    "prk:path must has attr_name: prk:path.attr_name");
+                        "prk:path must has attr_name: prk:path.attr_name");
                 if (ATTR_NAMES.contains(localAttrName)) {
                     if (key != null) throw new ParseException("Cant define prk:tags expected prk:attr.xxx");
                     key = localAttrName;
@@ -239,14 +237,8 @@ public class StAXXmlParser implements XmlParser {
             if (key != null) {
                 // ルート要素に属性が付いている場合は最初に設定したダミーのFragmentを削除しておく
                 if (offsetOfTagStart() == 0) fragments.clear();
-                fragments.addFirst(new Fragment(
-                    offsetOfTagStart(),
-                    Fragment.Type.TAG_START,
-                    key,
-                    value,
-                    attrs,
-                    prkAttrs,
-                    pathAttrs));
+                fragments.addFirst(new Fragment(offsetOfTagStart(), Fragment.Type.TAG_START, key, value, attrs,
+                        prkAttrs, pathAttrs));
                 if (isLoop || key.equals(PrkAttribute.BLOCK.name)) {
                     fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
                 }
@@ -276,10 +268,8 @@ public class StAXXmlParser implements XmlParser {
                 // TODO name, language などのリテラル
                 if (language == null) throw new ParseException("format error: language is null.");
                 if (name == null) throw new ParseException("format error: name is null.");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.DEF_START).appendPrkAttrs(
-                    attr("language", language),
-                    attr("type", type),
-                    attr("name", name)).build());
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.DEF_START)
+                        .appendPrkAttrs(attr("language", language), attr("type", type), attr("name", name)).build());
                 int defBodyOffset = reader.getLocation().getCharacterOffset() + 1;
                 event = reader.next();
                 if (event != XMLStreamReader.CHARACTERS) throw new ParseException("format error: ");
@@ -306,14 +296,20 @@ public class StAXXmlParser implements XmlParser {
                     }
                 }
                 if (className == null) throw new ParseException("attribute must be contain 'class' in prk:functions");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.FUNCTIONS).appendPrkAttrs(
-                    attr("class", className),
-                    attr("name", name)).build());
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.FUNCTIONS)
+                        .appendPrkAttrs(attr("class", className), attr("name", name)).build());
                 event = reader.next();
                 if (event != XMLStreamReader.END_ELEMENT) throw new ParseException("prk:functions can't has an element");
                 fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
-            } else if (localName.equals(PrkElement.COMPONENT.name)) { // <prk:component
-                // />
+            } else if (localName.equals(PrkElement.VAL.name)) { // <prk:val />
+                String name = find("name");
+                if (name == null) throw new ParseException("name is not found in prk:component");
+                String value = find("value");
+                if (value == null) throw new ParseException("value is not found in prk:component");
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_EMPTY_ELEMENTS)
+                        .append(PrkElement.VAL.name, name).appendAttrs(Fragment.attr("value", value)).build());
+                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+            } else if (localName.equals(PrkElement.COMPONENT.name)) { // <prk:component />
                 String type = find("type");
                 int attrCount = reader.getAttributeCount();
                 ArrayList<Attribute> attrs = new ArrayList<Attribute>();
@@ -326,10 +322,8 @@ public class StAXXmlParser implements XmlParser {
                 int compTagOffset = offsetOfTagStart();
                 event = reader.next();
                 if (event == XMLStreamReader.END_ELEMENT) {
-                    Builder frg =
-                        Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS).append(
-                            PrkElement.COMPONENT.name,
-                            type);
+                    Builder frg = Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS).append(
+                            PrkElement.COMPONENT.name, type);
                     fragments.addFirst(frg.appendAttrs(attrs).build());
                     fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
                     return;
@@ -364,33 +358,27 @@ public class StAXXmlParser implements XmlParser {
                         }
                     }
                 }
-                fragments.addFirst(Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS).append(
-                    PrkElement.COMPONENT.name,
-                    type).appendAttrs(attrs).build());
+                fragments.addFirst(Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS)
+                        .append(PrkElement.COMPONENT.name, type).appendAttrs(attrs).build());
                 fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
             } else if (localName.equals(PrkElement.REPLACE.name)) { // <prk:replace>
                 String value = find("value");
                 if (value == null) throw new ParseException("value is not found in prk:replace");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START).append(
-                    PrkElement.REPLACE.name,
-                    value).build());
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START)
+                        .append(PrkElement.REPLACE.name, value).build());
                 depth.nest();
             } else if (localName.equals(PrkElement.FOR.name)) { // <prk:for>
                 String value = find("loop");
                 if (value == null) throw new ParseException("loop is not found in prk:for");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START).append(
-                        PrkElement.FOR.name,
-                        value).build());
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START)
+                        .append(PrkElement.FOR.name, value).build());
                 fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
                 depth.nest();
-            } else if (localName.equals(PrkElement.INCLUDE.name)) { // <prk:include
-                // file="..."
-                // >
+            } else if (localName.equals(PrkElement.INCLUDE.name)) { // <prk:include  file="..." >
                 String file = find("file");
                 if (file == null) throw new ParseException("file is not found in prk:include");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_EMPTY_ELEMENTS).append(
-                    PrkElement.INCLUDE.name,
-                    file).build());
+                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_EMPTY_ELEMENTS)
+                        .append(PrkElement.INCLUDE.name, file).build());
                 fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
             } else {
                 throw new ParseException("Unkown Element: " + qname);
@@ -398,9 +386,8 @@ public class StAXXmlParser implements XmlParser {
         }
 
         private boolean isEndPrkComponent() {
-            return reader.isEndElement()
-                && reader.getPrefix().equals("prk")
-                && reader.getLocalName().equals("component");
+            return reader.isEndElement() && reader.getPrefix().equals("prk")
+                    && reader.getLocalName().equals("component");
         }
 
         private boolean isStartPrkParam() {

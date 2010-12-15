@@ -217,6 +217,8 @@ public class TemplateBuilder {
                 } catch (Exception e) {
                     throw new ParseException(e);
                 }
+            } else if (PrkElement.VAL.name.equals(fragment.prkKey)) {
+                return new ValNode(fragment.prkValue, fragment.attributes().get("value"));
             } else {
                 String tagName = getTagText(str);
                 return new EmptyElementTagNode(
