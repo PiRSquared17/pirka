@@ -11,6 +11,16 @@ import java.util.regex.Pattern;
 public class StringExpression {
     
     private static final Pattern STR_EXPRESSION_PATTERN = Pattern.compile(".*\\$\\{.+\\}.*");
+    
+    /**
+     * 評価式のパターンに一致する場合にtrueを返す
+     * @param text 評価文字列
+     * @return 評価式のパターンに一致する場合にtrue
+     */
+    public static boolean isExpression(String text) {
+        return STR_EXPRESSION_PATTERN.matcher(text).matches();
+    }
+    
     /**
      * 評価式が文字列式であるかを判定する。
      * @param expression 評価式
@@ -18,7 +28,7 @@ public class StringExpression {
      */
     public static StringExpression createOrNull(String expression) {
         if (expression == null) throw new IllegalArgumentException("expression == null");
-        if (!STR_EXPRESSION_PATTERN.matcher(expression).matches()) return null;
+        if (!isExpression(expression)) return null;
         int begin = 0;
         int last = 0;
         int count = 0;
