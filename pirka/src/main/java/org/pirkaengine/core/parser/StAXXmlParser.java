@@ -447,7 +447,7 @@ public class StAXXmlParser implements XmlParser {
         }
     }
 
-    private class Depth {
+    private static class Depth {
         private LinkedList<Integer> stack = new LinkedList<Integer>();
 
         private Depth() {

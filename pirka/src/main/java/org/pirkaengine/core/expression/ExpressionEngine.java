@@ -13,7 +13,6 @@ import java.util.Map;
 import org.pirkaengine.core.script.ScriptEngineException;
 import org.pirkaengine.core.util.VariableUtil;
 
-
 /**
  * 評価式エンジン.
  * @author shuji
@@ -158,7 +157,7 @@ public class ExpressionEngine {
                     Object left = this.eval(expressions[0], model, functions);
                     Object right = this.eval(expressions[1], model, functions);
                     if (left == null && right == null) return Boolean.TRUE;
-                    if (left == null && right != null) return Boolean.FALSE;
+                    if (left == null) return Boolean.FALSE;
                     return left.equals(right);
                 } else if (expression.contains("!=")) {
                     // !=
@@ -166,7 +165,7 @@ public class ExpressionEngine {
                     Object left = this.eval(expressions[0], model, functions);
                     Object right = this.eval(expressions[1], model, functions);
                     if (left == null && right == null) return Boolean.FALSE;
-                    if (left == null && right != null) return Boolean.TRUE;
+                    if (left == null) return Boolean.TRUE;
                     return !left.equals(right);
                 } else {
                     // それ以外

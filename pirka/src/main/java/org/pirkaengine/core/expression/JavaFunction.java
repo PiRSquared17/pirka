@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Java 関数クラス.
@@ -98,5 +99,39 @@ public class JavaFunction extends Function implements Serializable {
             throw new IllegalStateException(e);
         }
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((methodClass == null) ? 0 : methodClass.hashCode());
+        result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
+        result = prime * result + Arrays.hashCode(paramTypes);
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+        JavaFunction other = (JavaFunction) obj;
+        if (methodClass == null) {
+            if (other.methodClass != null) return false;
+        } else if (!methodClass.equals(other.methodClass)) return false;
+        if (methodName == null) {
+            if (other.methodName != null) return false;
+        } else if (!methodName.equals(other.methodName)) return false;
+        if (!Arrays.equals(paramTypes, other.paramTypes)) return false;
+        return true;
+    }
+    
+    
 
 }
