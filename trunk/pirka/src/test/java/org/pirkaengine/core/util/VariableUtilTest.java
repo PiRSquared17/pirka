@@ -45,13 +45,13 @@ public class VariableUtilTest {
     @Test
     public void toNumber_int() {
         String value = "1";
-        Assert.assertEquals(new Integer(1), VariableUtil.toNumber(value));
+        Assert.assertEquals(Integer.valueOf(1), VariableUtil.toNumber(value));
     }
 
     @Test
     public void toNumber_double() {
         String value = "2.8";
-        Assert.assertEquals(new Double(2.8), VariableUtil.toNumber(value));
+        Assert.assertEquals(Double.valueOf(2.8), VariableUtil.toNumber(value));
     }
 
     @Test

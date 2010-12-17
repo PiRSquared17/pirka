@@ -28,7 +28,7 @@ public class CacheManager {
     private final Lock lock = new ReentrantLock();
     private final ConcurrentMap<String, CacheLock> locks = new ConcurrentHashMap<String, CacheLock>();
 
-    private class CacheLock {
+    private static class CacheLock {
         private final Lock lock = new ReentrantLock();
         private final AtomicInteger count = new AtomicInteger(0);
 

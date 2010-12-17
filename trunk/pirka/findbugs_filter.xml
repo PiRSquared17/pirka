@@ -1,0 +1,4 @@
+<FindBugsFilter>
+     <Match classregex=".*Test$?.*" />
+     <Match class="org.pirkaengine.core.Item" />
+</FindBugsFilter>

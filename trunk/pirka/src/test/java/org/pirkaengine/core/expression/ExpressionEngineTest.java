@@ -231,7 +231,7 @@ public class ExpressionEngineTest {
     @Test
     public void evalBoolean_0L() {
         HashMap<String, Object> model = new HashMap<String, Object>();
-        model.put("foo", new Long(0));
+        model.put("foo", Long.valueOf(0));
         assertThat(target.evalBoolean("foo", model), is(false));
     }
 
@@ -281,7 +281,7 @@ public class ExpressionEngineTest {
     @Test
     public void evalBoolean_1L() {
         HashMap<String, Object> model = new HashMap<String, Object>();
-        model.put("foo", new Long(1));
+        model.put("foo", Long.valueOf(1));
         assertThat(target.evalBoolean("foo", model), is(true));
     }
 
