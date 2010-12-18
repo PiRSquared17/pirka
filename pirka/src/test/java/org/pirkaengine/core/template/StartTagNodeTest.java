@@ -10,7 +10,7 @@ import org.pirkaengine.core.expression.Function;
 
 /**
  * StartTagNodeTest
- * @author shuji
+ * @author shuji.w6e
  */
 public class StartTagNodeTest {
     private StartTagNode target;
@@ -44,7 +44,7 @@ public class StartTagNodeTest {
     @Test
     public void getText_when_true_widh_prkattr() {
         prkAttrs.put("attr.selected.when", "cond");
-        prkAttrs.put("attr.selected", "#selected");
+        prkAttrs.put("attr.selected", "'selected'");
         target = new StartTagNode("<option>", "attr", "attr", prkAttrs, pathAttrs, attrs);
         viewModel.put("cond", true);
         assertEquals("<option selected=\"selected\">", target.getText(viewModel, functions));
