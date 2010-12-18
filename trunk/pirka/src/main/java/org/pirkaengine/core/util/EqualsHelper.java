@@ -60,7 +60,7 @@ public class EqualsHelper {
      * @return 文字列のハッシュ値
      */
     public static int getHashCode(String... strs) {
-        int hash = 31;
+        int hash = 13;
         for (int i = 0; i < strs.length; i++) {
             hash = hash + (strs[i] != null ? 17 * strs[i].hashCode() : 0);
         }

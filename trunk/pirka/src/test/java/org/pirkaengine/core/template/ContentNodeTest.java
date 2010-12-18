@@ -1,19 +1,13 @@
 package org.pirkaengine.core.template;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pirkaengine.core.template.ContentNode;
-import org.pirkaengine.core.template.EndTagNode;
-import org.pirkaengine.core.template.Node;
-import org.pirkaengine.core.template.StartTagNode;
-import org.pirkaengine.core.template.TextNode;
 
 /**
  * ContentNodeTest
- * @author shuji
+ * @author shuji.w6e
  */
 public class ContentNodeTest {
     private ContentNode target;

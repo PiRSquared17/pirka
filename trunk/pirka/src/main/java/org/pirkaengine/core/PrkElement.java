@@ -22,8 +22,7 @@ public enum PrkElement {
     /** prk:include */
     INCLUDE("include"),
     /** prk:functions */
-    FUNCTIONS("functions"),
-    ;
+    FUNCTIONS("functions");
 
     /** 名称 */
     public final String name;

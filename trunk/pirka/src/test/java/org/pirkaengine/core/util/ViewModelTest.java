@@ -151,7 +151,6 @@ public class ViewModelTest {
             public boolean active = true;
             @SuppressWarnings("unused")
             public Object item = new Object() {
-                @SuppressWarnings("unused")
                 public String name = "Pirka";
             };
         };

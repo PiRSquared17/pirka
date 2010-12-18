@@ -58,7 +58,6 @@ public class FunctionEngine {
             throw new EvalException("function:" + function, e);
         } catch (NoSuchFieldException e) {
             throw new EvalException("function:" + function, e);
-        } finally {
         }
     }
 

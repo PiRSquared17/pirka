@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.pirkaengine.core.expression.Function;
 
-
 /**
  * 空要素ノード.
  * <p>
@@ -47,7 +46,7 @@ public class EmptyNode extends CompositeNode {
 
     @Override
     public boolean equals(Object obj) {
-        if(!super.equals(obj)) return false;
+        if (!super.equals(obj)) return false;
         return obj instanceof EmptyNode;
     }
 

@@ -152,6 +152,11 @@ public class PirkaView implements Navigation {
         return template.generate(ViewModel.create(template, model));
     }
     
+    /**
+     * 出力ストリームを指定してレンダリングする
+     * @param out OutputStream 
+     * @throws IOException 入出力例外発生時
+     */
     public void render(OutputStream out) throws IOException {
         try {
             getRenderer().render(out);
@@ -167,8 +172,13 @@ public class PirkaView implements Navigation {
             throw new IOException(e);
         }
     }
-
-    public void render(Writer writer)  throws IOException {
+    
+    /**
+     * Writerを指定してレンダリングする
+     * @param writer Writer
+     * @throws IOException 入出力例外発生時
+     */
+    public void render(Writer writer) throws IOException {
         try {
             getRenderer().render(writer);
         } catch (RenderException e) {

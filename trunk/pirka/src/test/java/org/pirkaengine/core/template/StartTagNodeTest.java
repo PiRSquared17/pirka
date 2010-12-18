@@ -4,14 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 
-
 import org.junit.Before;
 import org.junit.Test;
-import org.pirkaengine.core.PrkAttribute;
 import org.pirkaengine.core.expression.Function;
-import org.pirkaengine.core.template.Node;
-import org.pirkaengine.core.template.StartTagNode;
-import org.pirkaengine.core.template.TextNode;
 
 /**
  * StartTagNodeTest

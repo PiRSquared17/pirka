@@ -16,7 +16,7 @@ import org.pirkaengine.core.expression.Function;
  */
 public class TextNode extends Node {
     private static final long serialVersionUID = 1L;
-    static final Pattern prk_TAG_PATTERN = Pattern.compile("</?prk:.*>");
+    static final Pattern PRK_TAG_PATTERN = Pattern.compile("</?prk:.*>");
     final String text;
 
     /**
@@ -33,7 +33,7 @@ public class TextNode extends Node {
      * @return prk:タグである場合にtrue
      */
     public boolean isPrkTag() {
-        return prk_TAG_PATTERN.matcher(text).matches();
+        return PRK_TAG_PATTERN.matcher(text).matches();
     }
     
     /*

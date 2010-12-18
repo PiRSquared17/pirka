@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
  * @since 0.1.0
  */
 public class StringExpression {
-    
+
     private static final Pattern STR_EXPRESSION_PATTERN = Pattern.compile(".*\\$\\{.+\\}.*");
-    
+
     /**
      * 評価式のパターンに一致する場合にtrueを返す
      * @param text 評価文字列
@@ -20,7 +20,7 @@ public class StringExpression {
     public static boolean isExpression(String text) {
         return STR_EXPRESSION_PATTERN.matcher(text).matches();
     }
-    
+
     /**
      * 評価式が文字列式であるかを判定する。
      * @param expression 評価式
@@ -34,7 +34,7 @@ public class StringExpression {
         int count = 0;
         String[] expressions = new String[32]; // TODO 固定でいいと思う
         StringBuilder strExp = new StringBuilder();
-        while(0 <= (begin = expression.indexOf("${", last))) {
+        while (0 <= (begin = expression.indexOf("${", last))) {
             strExp.append(expression.substring(last, begin)).append("%s");
             last = expression.indexOf('}', begin) + 1;
             expressions[count] = expression.substring(begin + 2, last - 1);
@@ -43,17 +43,17 @@ public class StringExpression {
         strExp.append(expression.substring(last));
         return new StringExpression(strExp.toString(), Arrays.copyOfRange(expressions, 0, count));
     }
-    
+
     final String format;
     final String[] expressions;
-    
+
     StringExpression(String format, String[] expressions) {
         assert format != null;
         assert expressions != null;
         this.format = format;
         this.expressions = expressions;
     }
-    
+
     /**
      * 文字列式をフォーマットする
      * @param args
@@ -62,7 +62,7 @@ public class StringExpression {
     public String format(Object... args) {
         return String.format(format, args);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof StringExpression)) return false;
@@ -74,7 +74,7 @@ public class StringExpression {
         }
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = this.format.hashCode();
@@ -83,7 +83,7 @@ public class StringExpression {
         }
         return hash;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();

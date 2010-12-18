@@ -23,7 +23,6 @@ import org.pirkaengine.core.parser.StAXXmlParser;
 import org.pirkaengine.core.parser.XhtmlStruct;
 import org.pirkaengine.core.parser.XmlParser;
 
-
 /**
  * テンプレートビルダ.
  * <p>
@@ -102,7 +101,7 @@ public class TemplateBuilder {
         }
     }
 
-    void buildTemplate(XhtmlTemplate template, XhtmlStruct struct, Map<String, BlockNode> blocks) throws ParseException {
+    void buildTemplate(XhtmlTemplate template, XhtmlStruct struct, Map<String, BlockNode> blockNodes) throws ParseException {
         StringBuilder text = struct.getText();
         ListIterator<Fragment> iter = struct.getFragments().listIterator();
         assert iter.hasNext();
@@ -118,7 +117,7 @@ public class TemplateBuilder {
                 text.delete(fragment.offset, text.length());
                 continue;
             }
-            Node node = toNode(template, text, fragment, iter, blocks);
+            Node node = toNode(template, text, fragment, iter, blockNodes);
             if (isDebugEnabled()) debug(node);
             if (node instanceof ScriptNode) {
                 template.addScript((ScriptNode) node);
@@ -157,8 +156,8 @@ public class TemplateBuilder {
             throw new AssertionError("EXPRESSION: " + str);
         case TAG_START:
             String tagText = getTagText(str);
-            return new StartTagNode(tagText, fragment.prkKey, fragment.prkValue, fragment.prkAttributes(), fragment
-                .pathAttributes(), fragment.attributes());
+            return new StartTagNode(tagText, fragment.prkKey, fragment.prkValue, fragment.prkAttributes(),
+                    fragment.pathAttributes(), fragment.attributes());
         case TAG_BODY:
             return new TextNode(str);
         case TAG_END:
@@ -193,9 +192,8 @@ public class TemplateBuilder {
         case TAG_EMPTY_ELEMENTS:
             if (PrkElement.REPLACE.name.equals(fragment.prkKey)) {
                 tagText = getTagText(str);
-                start =
-                    new StartTagNode(tagText, fragment.prkKey, fragment.prkValue, fragment.prkAttributes(), fragment
-                        .pathAttributes(), fragment.attributes());
+                start = new StartTagNode(tagText, fragment.prkKey, fragment.prkValue, fragment.prkAttributes(),
+                        fragment.pathAttributes(), fragment.attributes());
                 end = new EndTagNode(str);
                 return new ReplaceNode(start, end, new Node[] {});
             } else if (PrkElement.INCLUDE.name.equals(fragment.prkKey)) {
@@ -221,13 +219,8 @@ public class TemplateBuilder {
                 return new ValNode(fragment.prkValue, fragment.attributes().get("value"));
             } else {
                 String tagName = getTagText(str);
-                return new EmptyElementTagNode(
-                    tagName,
-                    fragment.prkKey,
-                    fragment.prkValue,
-                    fragment.prkAttributes(),
-                    fragment.pathAttributes(),
-                    fragment.attributes());
+                return new EmptyElementTagNode(tagName, fragment.prkKey, fragment.prkValue, fragment.prkAttributes(),
+                        fragment.pathAttributes(), fragment.attributes());
             }
         case DEF_START:
             throw new AssertionError();
