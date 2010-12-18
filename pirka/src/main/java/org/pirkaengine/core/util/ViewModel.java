@@ -75,11 +75,11 @@ public class ViewModel {
             }
         }
 
-        private Object getValue(Class<?> modelClass, Object model, String key) throws ModelDeficientPropertyException {
+        private Object getValue(Class<?> modelClass, Object aModel, String key) throws ModelDeficientPropertyException {
             try {
                 Field field = modelClass.getField(key);
                 if (field != null && Modifier.isPublic(field.getModifiers())) {
-                    return field.get(model);
+                    return field.get(aModel);
                 }
             } catch (NoSuchFieldException e) {
                 // do nothing
@@ -92,7 +92,7 @@ public class ViewModel {
             try {
                 Method getter = modelClass.getMethod(getterMethod);
                 if (getter != null && Modifier.isPublic(getter.getModifiers())) {
-                    return getter.invoke(model);
+                    return getter.invoke(aModel);
                 }
             } catch (NoSuchMethodException e) {
                 // do nothing
@@ -106,7 +106,7 @@ public class ViewModel {
             try {
                 Method method = modelClass.getMethod(key);
                 if (method != null && Modifier.isPublic(method.getModifiers())) {
-                    return method.invoke(model);
+                    return method.invoke(aModel);
                 }
             } catch (NoSuchMethodException e) {
                 // do nothing

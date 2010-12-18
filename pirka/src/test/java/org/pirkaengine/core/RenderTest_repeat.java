@@ -3,11 +3,6 @@ package org.pirkaengine.core;
 import static org.pirkaengine.core.TestUtil.*;
 
 import org.junit.Test;
-import org.pirkaengine.core.PirkaLoadException;
-import org.pirkaengine.core.RenderException;
-import org.pirkaengine.core.Template;
-import org.pirkaengine.core.TemplateNotFoundException;
-import org.pirkaengine.core.expression.EvalException;
 import org.pirkaengine.core.parser.ParseException;
 
 /**

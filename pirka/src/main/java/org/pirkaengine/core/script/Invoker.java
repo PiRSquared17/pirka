@@ -6,12 +6,12 @@ import org.pirkaengine.core.expression.JavaFunction;
 /**
  * 関数実行インターフェイス.
  * @author shuji
- * @since 1.0
+ * @since 0.1.0
  */
 public interface Invoker {
 
     /** Java の静的メソッド用Invoker */
-    static final Invoker JAVA_STATIC_METHOD_INVOKER = new Invoker() {
+    Invoker JAVA_STATIC_METHOD_INVOKER = new Invoker() {
 
         /*
          * (non-Javadoc)

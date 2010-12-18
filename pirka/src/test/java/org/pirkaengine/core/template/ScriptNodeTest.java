@@ -4,9 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pirkaengine.core.expression.Function;
 import org.pirkaengine.core.expression.ScriptFunction;
-import org.pirkaengine.core.template.ScriptNode;
 
 public class ScriptNodeTest {
 

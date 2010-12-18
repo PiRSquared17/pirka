@@ -7,14 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import org.junit.Assert;
 import org.junit.Test;
-import org.pirkaengine.core.PirkaLoadException;
-import org.pirkaengine.core.RenderException;
-import org.pirkaengine.core.Template;
-import org.pirkaengine.core.TemplateNotFoundException;
-import org.pirkaengine.core.expression.EvalException;
 import org.pirkaengine.core.parser.ParseException;
 
 /**

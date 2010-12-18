@@ -37,8 +37,7 @@ public enum PrkAttribute {
     /** prk:extends */
     EXTENDS("extends"),
     /** prk:block */
-    BLOCK("block"),
-    ;
+    BLOCK("block");
 
     /** 名称 */
     public final String name;

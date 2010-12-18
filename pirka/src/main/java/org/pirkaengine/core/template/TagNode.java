@@ -85,16 +85,16 @@ public abstract class TagNode extends TextNode implements Serializable {
         Collections.sort(keys);
         Collections.reverse(keys);
         for (String key : keys) {
-            String attrName = key.substring(PrkAttribute.ATTR.name.length() + 1);
-            if (!attrName.endsWith(".when")) {
-                if (attrs.contains(attrName)) continue;
+            String attributeName = key.substring(PrkAttribute.ATTR.name.length() + 1);
+            if (!attributeName.endsWith(".when")) {
+                if (attrs.contains(attributeName)) continue;
                 String value = ExpressionEngine.getInstance().eval(prkAttributes.get(key), model, functions);
-                buf.append(' ').append(attrName).append("=\"").append(value).append('"');
-                attrs.add(attrName);
+                buf.append(' ').append(attributeName).append("=\"").append(value).append('"');
+                attrs.add(attributeName);
             } else { // when
-                if(!ExpressionEngine.getInstance().evalBoolean(prkAttributes.get(key), model, functions)){
+                if (!ExpressionEngine.getInstance().evalBoolean(prkAttributes.get(key), model, functions)) {
                     // 表示しないので属性名だけ登録
-                    attrs.add(attrName.substring(0, attrName.lastIndexOf('.')));
+                    attrs.add(attributeName.substring(0, attributeName.lastIndexOf('.')));
                 }
             }
         }
@@ -121,7 +121,9 @@ public abstract class TagNode extends TextNode implements Serializable {
         assert buf.charAt(0) != ' '; // <x
         assert buf.charAt(1) != ' '; // <x
         int index = 2;
-        while(buf.charAt(index) != ' ') index++;
+        while (buf.charAt(index) != ' ') {
+            index++;
+        }
         buf.delete(index, buf.length() - 1);
         return buf.toString();
     }

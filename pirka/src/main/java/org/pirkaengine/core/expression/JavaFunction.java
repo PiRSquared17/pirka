@@ -88,7 +88,7 @@ public class JavaFunction extends Function implements Serializable {
      */
     public Object invoke(Object... args) throws EvalException {
         try {
-            return method.invoke(null, args);// static method
+            return method.invoke(null, args); // static method
         } catch (IllegalArgumentException e) {
             throw new EvalException(e);
         } catch (IllegalAccessException e) {

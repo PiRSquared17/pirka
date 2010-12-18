@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.pirkaengine.core.expression.Function;
 
-
 /**
  * 終了タグノード.
  * <p>
@@ -45,7 +44,7 @@ public class EndTagNode extends TextNode {
      */
     @Override
     public boolean equals(Object obj) {
-        if(!super.equals(obj)) return false;
+        if (!super.equals(obj)) return false;
         return obj instanceof EndTagNode;
     }
 

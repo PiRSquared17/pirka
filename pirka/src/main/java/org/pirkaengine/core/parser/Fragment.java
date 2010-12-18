@@ -59,9 +59,9 @@ public class Fragment {
          * @param value
          * @return ビルダ
          */
-        public Builder append(String key, String value) {
-            this.key = key;
-            this.value = value;
+        public Builder append(String aKey, String aValue) {
+            this.key = aKey;
+            this.value = aValue;
             return this;
         }
 
@@ -70,8 +70,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendAttrs(List<Attribute> attrs) {
-            this.attrs = attrs;
+        public Builder appendAttrs(List<Attribute> attributes) {
+            this.attrs = attributes;
             return this;
         }
 
@@ -80,8 +80,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendAttrs(Attribute... attrs) {
-            this.attrs = toList(attrs);
+        public Builder appendAttrs(Attribute... attributes) {
+            this.attrs = toList(attributes);
             return this;
         }
 
@@ -90,8 +90,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendprkAttrs(List<Attribute> attrs) {
-            this.prkAttrs = attrs;
+        public Builder appendprkAttrs(List<Attribute> attributes) {
+            this.prkAttrs = attributes;
             return this;
         }
 
@@ -100,8 +100,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendPrkAttrs(Attribute... attrs) {
-            this.prkAttrs = toList(attrs);
+        public Builder appendPrkAttrs(Attribute... attributes) {
+            this.prkAttrs = toList(attributes);
             return this;
         }
 
@@ -110,8 +110,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendPathAttrs(List<Attribute> attrs) {
-            this.pathAttrs = attrs;
+        public Builder appendPathAttrs(List<Attribute> attributes) {
+            this.pathAttrs = attributes;
             return this;
         }
 
@@ -120,8 +120,8 @@ public class Fragment {
          * @param attrs
          * @return ビルダ
          */
-        public Builder appendPathAttrs(Attribute... attrs) {
-            this.pathAttrs = toList(attrs);
+        public Builder appendPathAttrs(Attribute... attributes) {
+            this.pathAttrs = toList(attributes);
             return this;
         }
 
@@ -145,9 +145,9 @@ public class Fragment {
             return new Fragment(offset, type, key, value, attrs, prkAttrs, pathAttrs);
         }
 
-        private List<Attribute> toList(Attribute... attrs) {
+        private List<Attribute> toList(Attribute... attributes) {
             ArrayList<Attribute> list = new ArrayList<Attribute>();
-            for (Attribute attr : attrs) {
+            for (Attribute attr : attributes) {
                 list.add(attr);
             }
             return list;

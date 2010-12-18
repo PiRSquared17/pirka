@@ -3,8 +3,6 @@ package org.pirkaengine.core.script;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
-import org.pirkaengine.core.PirkaContext;
-import org.pirkaengine.core.expression.Function;
 import org.pirkaengine.core.script.InvokerFactory;
 import org.pirkaengine.core.script.ScriptEngineException;
 

@@ -254,7 +254,7 @@ public class StAXXmlParser implements XmlParser {
         /** prk:def / prk:replace / prk:component / prk:include / prk:extends / prk:functions の処理 */
         private void handlePrkTag(QName qname) throws ParseException, XMLStreamException {
             String localName = qname.getLocalPart();
-            if (localName.equals(PrkElement.DEF.name)) {// <prk:def />
+            if (localName.equals(PrkElement.DEF.name)) { // <prk:def />
                 int attrCount = reader.getAttributeCount();
                 String language = null;
                 String type = "function";
@@ -274,15 +274,16 @@ public class StAXXmlParser implements XmlParser {
                 event = reader.next();
                 if (event != XMLStreamReader.CHARACTERS) throw new ParseException("format error: ");
                 fragments.addFirst(Fragment.create(defBodyOffset, Fragment.Type.DEF_CDATA).build());
-                while (event == XMLStreamReader.CHARACTERS)
+                while (event == XMLStreamReader.CHARACTERS) {
                     event = reader.next();
+                }
                 if (event != XMLStreamReader.END_ELEMENT) throw new ParseException("format error: ");
                 if (!reader.getPrefix().equals("prk") || !reader.getLocalName().equals("def")) {
                     throw new ParseException("format error: ");
                 }
                 fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.DEF_END).build());
                 fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
-            } else if (localName.equals(PrkElement.FUNCTIONS.name)) {// <prk:functions
+            } else if (localName.equals(PrkElement.FUNCTIONS.name)) { // <prk:functions
                 String className = null;
                 String name = "";
                 for (int i = 0; i < reader.getAttributeCount(); i++) {
@@ -329,8 +330,9 @@ public class StAXXmlParser implements XmlParser {
                     return;
                 }
                 // <prk:param>
-                while (event != XMLStreamReader.START_ELEMENT && event != XMLStreamReader.END_ELEMENT)
+                while (event != XMLStreamReader.START_ELEMENT && event != XMLStreamReader.END_ELEMENT) {
                     event = reader.next();
+                }
                 outer: while (true) {
                     // <prk:param key="xxx" value="xxx" />
                     if (event != XMLStreamReader.START_ELEMENT) throw new ParseException("format error: ");
