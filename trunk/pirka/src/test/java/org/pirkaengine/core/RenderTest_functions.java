@@ -4,8 +4,6 @@ import static org.pirkaengine.core.TestUtil.*;
 
 import java.util.Calendar;
 
-
-
 import org.junit.Test;
 import org.pirkaengine.core.PirkaLoadException;
 import org.pirkaengine.core.Template;
@@ -22,7 +20,6 @@ public class RenderTest_functions extends RenderTest {
         String actual = tmpl.generate(viewModel).render();
         assertRenderEquals(templateName, actual);
     }
-
 
     @Test
     public void render_PrkFunctions_format() throws ParseException, PirkaLoadException, TemplateNotFoundException {
@@ -57,5 +54,22 @@ public class RenderTest_functions extends RenderTest {
         String actual = tmpl.generate(viewModel).render();
         assertRenderEquals(templateName, actual);
     }
-    
+
+    @Test
+    public void render_PrkFunctions_cond_true() throws ParseException, PirkaLoadException, TemplateNotFoundException {
+        String templateName = "PrkFunctions_cond_true";
+        Template tmpl = loader.load(getTemplateFileName(templateName));
+        viewModel.put("flg", true);
+        String actual = tmpl.generate(viewModel).render();
+        assertRenderEquals(templateName, actual);
+    }
+
+    @Test
+    public void render_PrkFunctions_cond_false() throws ParseException, PirkaLoadException, TemplateNotFoundException {
+        String templateName = "PrkFunctions_cond_false";
+        Template tmpl = loader.load(getTemplateFileName(templateName));
+        viewModel.put("flg", false);
+        String actual = tmpl.generate(viewModel).render();
+        assertRenderEquals(templateName, actual);
+    }
 }

@@ -15,7 +15,6 @@ import org.pirkaengine.core.util.VariableUtil;
 
 /**
  * 評価式エンジン.
- * @author shuji
  * @author shuji.w6e
  * @since 0.1.0
  */
@@ -200,7 +199,9 @@ public class ExpressionEngine {
             throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
             InvocationTargetException, NoSuchFieldException, ScriptEngineException {
         assert 0 < keys.length;
-        if (keys[0].charAt(0) == '#') return keys[0].substring(1);
+        if (keys[0].charAt(0) == '\'' && keys[0].charAt(keys[0].length() - 1) == '\'') {
+            return keys[0].substring(1, keys[0].length() - 1);
+        }
         Number num = VariableUtil.toNumber(keys[0]);
         if (num != null) return num;
         if (keys[0].matches(".+\\(.*\\)")) { // Function
@@ -227,7 +228,6 @@ public class ExpressionEngine {
             try {
                 Field field = clazz.getField(key);
                 if (Modifier.isPublic(field.getModifiers())) {
-                    // return returnEmptyStringIfNull(field.get(value));
                     return field.get(value);
                 }
             } catch (NoSuchFieldException e) {
@@ -245,7 +245,6 @@ public class ExpressionEngine {
             try {
                 Method method = clazz.getMethod(getGetter(key));
                 if (method.getReturnType() != Void.class && Modifier.isPublic(method.getModifiers())) {
-                    // return returnEmptyStringIfNull(method.invoke(value));
                     return method.invoke(value);
                 }
             } catch (NoSuchMethodException e) {
@@ -268,10 +267,6 @@ public class ExpressionEngine {
         } catch (InvocationTargetException e) {
             throw new EvalException("cant access key:" + key + ", value=" + value, e);
         }
-    }
-
-    private Object returnEmptyStringIfNull(Object value) {
-        return value != null ? value : "";
     }
 
     private String getGetter(String key) {

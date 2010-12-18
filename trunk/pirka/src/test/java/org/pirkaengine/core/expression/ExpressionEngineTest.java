@@ -155,19 +155,19 @@ public class ExpressionEngineTest {
     }
 
     /**
-     * #で始まる場合は単純な文字列として扱う
+     * シングルクォーテーションで囲まれている場合は単純な文字列として扱う
      */
     @Test
     public void eval_string_hello() {
-        Assert.assertEquals("hello", target.eval("#hello"));
+        Assert.assertEquals("hello", target.eval("'hello'"));
     }
 
     /**
-     * #で始まる場合は単純な文字列として扱う
+     * シングルクォーテーションで囲まれている場合は単純な文字列として扱う
      */
     @Test
     public void eval_string_123() {
-        Assert.assertEquals("123", target.eval("#123"));
+        Assert.assertEquals("123", target.eval("'123'"));
     }
 
     /**
