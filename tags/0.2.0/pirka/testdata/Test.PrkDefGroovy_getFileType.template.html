@@ -1,0 +1,18 @@
+<html xmlns:prk="http://www.pirkaengine.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>関数定義のテスト</title>
+</head>
+<body>
+  <p>${name}は${getFileType(name)}ファイルです。</p>
+</body>
+<prk:def language="groovy" type="function" name="getFileType(fileName)">
+<![CDATA[
+def getFileType(fileName) {
+  if (fileName ==~ /.+\.pdf/) return "PDF";
+  if (fileName ==~ /.+\.doc/) return "Word";
+  "file";
+}
+]]>
+</prk:def>
+</html>

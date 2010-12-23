@@ -1,0 +1,19 @@
+<html xmlns:prk="http://www.pirkaengine.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>特定の文字数でカットする関数</title>
+</head>
+<body>
+  <p>「${text1}」を10文字でカットすると、「${trim(text1, 10)}」</p>
+  <p>「${text2}」を10文字でカットすると、「${trim(text2, 10)}」</p>
+  <p>「${text3}」を10文字でカットすると、「${trim(text3, 10)}」</p>
+  <p>「${text2}」を5文字でカットすると、「${trim(text2, 5)}」</p>
+</body>
+<prk:def language="groovy" type="function" name="trim(text,maxLen)" >
+<![CDATA[
+def trim(text, maxLen) {
+  text.length() < maxLen ? text : text.substring(0, maxLen);
+}
+]]>
+</prk:def>
+</html>
