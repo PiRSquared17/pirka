@@ -1,0 +1,18 @@
+<html xmlns:prk="http://pirkaengine.org/" >
+<head>
+  <title>${title}</title>
+</head>
+<body>
+  <h1>${title}</h1>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+    </tr>
+    <tr prk:for="idx,item in list">
+      <td>${idx}.<a href="view.html" prk:attr.href="view/${item.id}" >${item.name}</a></td>
+      <td>${item.price}</td>
+    </tr>
+  </table>
+</body>
+</html>

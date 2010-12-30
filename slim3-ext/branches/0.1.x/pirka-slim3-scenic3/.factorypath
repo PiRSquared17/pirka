@@ -1,0 +1,4 @@
+<factorypath>
+   <factorypathentry kind="WKSPJAR" id="/pirka-slim3-scenic3/lib/slim3-gen-1.0.6.jar" enabled="true" runInBatchMode="false"/>
+   <factorypathentry kind="WKSPJAR" id="/pirka-slim3-scenic3/war/WEB-INF/lib/scenic3-0.3.0.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
