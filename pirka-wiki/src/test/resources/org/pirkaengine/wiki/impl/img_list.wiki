@@ -1,0 +1,6 @@
+ * http://code.google.com/images/code_sm.png
+ * http://pirkaengine.org/img/a.jpg
+ * http://pirkaengine.org/img/a.jpeg
+ * http://pirkaengine.org/img/a.gif
+ * http://pirkaengine.org/img/a.bmp
+ * http://pirkaengine.org/img/A.JPG
