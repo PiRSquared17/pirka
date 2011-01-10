@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,9 @@ public class BindTemplateTest {
         OutputStream output = new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                byte[] bytes = new byte[] { (byte) b };
+                byte[] bytes = new byte[] {
+                    (byte) b
+                };
                 buf.append(new String(bytes, "UTF-8"));
             }
         };
@@ -70,11 +73,32 @@ public class BindTemplateTest {
         OutputStream output = new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                byte[] bytes = new byte[] { (byte) b };
+                byte[] bytes = new byte[] {
+                    (byte) b
+                };
                 buf.append(new String(bytes, "MS932"));
             }
         };
         target.render(output, "MS932");
+        assertEquals(TEXT, buf.toString());
+    }
+
+    /**
+     * renderテスト(MS932).
+     */
+    @Test
+    public void render_outputstream_Charset_MS932() {
+        final StringBuffer buf = new StringBuffer();
+        OutputStream output = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                byte[] bytes = new byte[] {
+                    (byte) b
+                };
+                buf.append(new String(bytes, "MS932"));
+            }
+        };
+        target.render(output, Charset.forName("MS932"));
         assertEquals(TEXT, buf.toString());
     }
 
@@ -87,7 +111,9 @@ public class BindTemplateTest {
         OutputStream output = new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                byte[] bytes = new byte[] { (byte) b };
+                byte[] bytes = new byte[] {
+                    (byte) b
+                };
                 buf.append(new String(bytes, "EUC-JP"));
             }
         };
@@ -126,6 +152,34 @@ public class BindTemplateTest {
     public void render_outputstream_null() {
         OutputStream output = null;
         target.render(output);
+    }
+
+    /**
+     * renderテスト.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void render_outputstream_charcode_null() throws Exception {
+        OutputStream output = new OutputStream() {
+
+            @Override
+            public void write(int b) throws IOException {
+            }
+        };
+        target.render(output, (String) null);
+    }
+
+    /**
+     * renderテスト.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void render_outputstream_charset_null() throws Exception {
+        OutputStream output = new OutputStream() {
+
+            @Override
+            public void write(int b) throws IOException {
+            }
+        };
+        target.render(output, (Charset) null);
     }
 
     /**

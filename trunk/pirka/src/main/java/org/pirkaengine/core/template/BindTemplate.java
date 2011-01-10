@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import org.pirkaengine.core.PirkaRuntimeException;
@@ -73,8 +74,24 @@ public class BindTemplate implements Renderer {
         render(output, "UTF-8");
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.core.Renderer#render(java.io.OutputStream, java.lang.String)
+     */
+    @Override
     public void render(OutputStream output, String charset) throws RenderException {
+        if (charset == null) throw new IllegalArgumentException("charset is null.");
+        render(output, Charset.forName(charset));
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.core.Renderer#render(java.io.OutputStream, java.nio.charset.Charset)
+     */
+    @Override
+    public void render(OutputStream output, Charset charset) throws RenderException {
         if (output == null) throw new IllegalArgumentException("output is null.");
+        if (charset == null) throw new IllegalArgumentException("charset is null.");
         Writer writer = null;
         try {
             writer = new OutputStreamWriter(output, charset);
