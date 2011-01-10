@@ -2,6 +2,7 @@ package org.pirkaengine.core;
 
 import java.io.OutputStream;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * レンダリングインターフェイス.
@@ -34,6 +35,15 @@ public interface Renderer {
      * @since 0.2.0
      */
     void render(OutputStream output, String charset) throws RenderException;
+    
+    /**
+     * 文字セットを指定して、テンプレートの評価結果を出力ストリームに書き出す.
+     * @param output 出力ストリーム
+     * @param charset 文字セット
+     * @throws RenderException レンダリングに失敗した場合
+     * @since 0.3.0
+     */
+    void render(OutputStream output, Charset charset) throws RenderException;
 
     /**
      * テンプレートの評価結果をwriterに書き出す.
