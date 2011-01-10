@@ -1,0 +1,8 @@
+#Sat Jan 08 19:22:21 JST 2011
+eclipse.preferences.version=1
+encoding//src/test/resources/bestfit932.txt=Shift_JIS
+encoding//src/test/resources/org/pirkaengine/mobile/charset/ascii.txt=Shift_JIS
+encoding//src/test/resources/org/pirkaengine/mobile/charset/hankana.txt=Shift_JIS
+encoding//src/test/resources/org/pirkaengine/mobile/charset/kanji.txt=Shift_JIS
+encoding//src/test/resources/org/pirkaengine/mobile/charset/kigou.txt=WINDOWS-31J
+encoding//src/test/resources/org/pirkaengine/mobile/charset/zenkana.txt=Shift_JIS
