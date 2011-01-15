@@ -17,15 +17,18 @@ public abstract class Device {
     protected final Carrier carrier;
     /** Charset */
     protected final Charset charset;
+    /** Charset */
+    protected final String charsetName;
 
     /**
      * コンストラクタ.
      * @param carrier Carrier
      * @param charset Charset
      */
-    public Device(Carrier carrier, Charset charset) {
+    public Device(Carrier carrier, Charset charset, String charsetName) {
         this.carrier = carrier;
         this.charset = charset;
+        this.charsetName = charsetName;
     }
 
     /**
@@ -42,6 +45,14 @@ public abstract class Device {
      */
     public Charset getCharset() {
         return charset;
+    }
+    
+    /**
+     * 文字コードセット名を返す。
+     * @return
+     */
+    public String getCharsetName() {
+        return charsetName;
     }
 
     /**
