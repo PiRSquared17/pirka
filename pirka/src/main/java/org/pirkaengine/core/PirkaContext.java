@@ -1,6 +1,7 @@
 package org.pirkaengine.core;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ public class PirkaContext implements Serializable {
     private Map<String, String> scriptsLibs = new HashMap<String, String>();
     /** デバッグの有効 */
     private boolean enableDebug = false;
+    /** デフォルト文字セット */
+    private volatile Charset charset = null;
 
     /**
      * シングルトンのインスタンスを取得する.
@@ -85,7 +88,7 @@ public class PirkaContext implements Serializable {
     public void setEnableCache(boolean enableCache) {
         this.enableCache = enableCache;
     }
-    
+
     /**
      * ScriptThreadの有効を設定する.
      * @param enableScriptThread ScriptThreadを有効にする場合はtrue
@@ -93,7 +96,6 @@ public class PirkaContext implements Serializable {
     public void setEnableScriptThread(boolean enableScriptThread) {
         this.enableScriptThread = enableScriptThread;
     }
-    
 
     /**
      * アプリケーションルートパスを取得.
@@ -134,7 +136,7 @@ public class PirkaContext implements Serializable {
     public boolean isEnableScriptThread() {
         return enableScriptThread;
     }
-    
+
     /**
      * スクリプトエンジンへのパスを設定する.
      * @param language
@@ -167,6 +169,26 @@ public class PirkaContext implements Serializable {
      */
     public void setEnableDebug(boolean enableDebug) {
         this.enableDebug = enableDebug;
+    }
+
+    /**
+     * 文字セットを取得する
+     * @return
+     */
+    public Charset getCharset() {
+        if (charset == null) {
+            charset = Charset.forName("utf-8");
+        }
+        return charset;
+    }
+
+    /**
+     * 文字セットを設定する
+     * @param charset
+     */
+    public void setCharset(Charset charset) {
+        if (charset == null) throw new IllegalArgumentException("charset == null");
+        this.charset = charset;
     }
 
     /*

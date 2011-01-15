@@ -11,18 +11,13 @@ import org.pirkaengine.core.parser.ParseException;
 /**
  * @author shuji.w6e
  */
-public class RenderTest_noDocType extends RenderTest {
+public class RenderTest_DocType extends RenderTest {
 
-    /**
-     * @throws ParseException
-     * @throws PirkaLoadException
-     * @throws TemplateNotFoundException
-     */
     @Test
     public void render_no_DocType() throws ParseException, PirkaLoadException, TemplateNotFoundException {
-        String templateName = "NoDocType";
+        String templateName = "DocType";
         Template tmpl = loader.load(getTemplateFileName(templateName));
-        viewModel.put("text", "置換されました。");
+        viewModel.put("body", "DocType");
         String actual = tmpl.generate(viewModel).render();
         assertRenderEquals(templateName, actual);
     }

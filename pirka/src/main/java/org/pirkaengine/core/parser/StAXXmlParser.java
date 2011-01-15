@@ -4,7 +4,10 @@ import static org.pirkaengine.core.parser.Fragment.*;
 import static org.pirkaengine.core.util.Logger.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -54,13 +57,24 @@ public class StAXXmlParser implements XmlParser {
      */
     public StAXXmlParser() {
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.pirkaengine.core.parser.XmlParser#parse(java.io.InputStream, java.nio.charset.Charset)
+     */
+    @Override
+    public XhtmlStruct parse(InputStream input, Charset charset) throws ParseException {
+        if (input == null) throw new IllegalArgumentException("input == null.");
+        if (charset == null) throw new IllegalArgumentException("charset == null.");
+        return parse(new InputStreamReader(input, charset));
+    }
 
     /*
      * (non-Javadoc)
-     * 
      * @see org.pirkaengine.core.parser.XmlParser#parse(java.io.Reader)
      */
     public XhtmlStruct parse(Reader input) throws ParseException {
+        if (input == null) throw new IllegalArgumentException("input == null.");
         if (isDebugEnabled()) debug("parse: " + input);
         text.setLength(0);
         XMLStreamReader reader = null;
@@ -131,6 +145,12 @@ public class StAXXmlParser implements XmlParser {
         private Depth depth = new Depth();
         // イベント種別
         private int event;
+        private int coursor = -1;
+        private int offsetTagStart = 0;
+        private int offsetTagEnd = 0;
+        private int offsetTextStart = 0;
+        private int offsetTextEnd = 0;
+        private boolean resolveEmptyTag = false;
         // テキストと評価式が混在する場合のテキストの開始位置を保持する
         private int textLastOffset = -1;
 
@@ -146,7 +166,7 @@ public class StAXXmlParser implements XmlParser {
         }
 
         private void parse() throws XMLStreamException, ParseException {
-            event = reader.next();
+            event = next();
             switch (event) {
             case XMLStreamReader.START_ELEMENT:
                 handleStartElm();
@@ -158,9 +178,7 @@ public class StAXXmlParser implements XmlParser {
                 handleCharsElm();
                 break;
             case XMLStreamReader.CDATA:
-                // TODO ?
             case XMLStreamReader.COMMENT:
-                // TODO ?
             case XMLStreamReader.END_DOCUMENT:
                 // 空のテキストノード等が含まれている場合に削除
                 if (fragments.getFirst().offset == StAXXmlParser.this.text.length()) {
@@ -171,16 +189,46 @@ public class StAXXmlParser implements XmlParser {
             }
         }
 
-        private int offsetOfTagStart() {
-            return text.lastIndexOf("<", reader.getLocation().getCharacterOffset() - 1);
+        private int next() throws XMLStreamException {
+            int event = reader.next();
+            switch (event) {
+            case XMLStreamReader.START_ELEMENT:
+                String tagStart = "<" + getTagName();
+                offsetTagStart = text.indexOf(tagStart, coursor + 1);
+                offsetTagEnd = text.indexOf(">", offsetTagStart);
+                assert offsetTagStart != -1 : getTagName();
+                coursor = offsetTagStart;
+                resolveEmptyTag = false;
+                break;
+            case XMLStreamReader.END_ELEMENT:
+                // START = END, such as: <aaa />
+                if (!resolveEmptyTag && text.charAt(offsetTagEnd - 1) == '/') {
+                    resolveEmptyTag = true;
+                    break;
+                }
+                resolveEmptyTag = false;
+                offsetTagStart = text.indexOf("</" + getTagName(), coursor + 1);
+                offsetTagEnd = text.indexOf(">", offsetTagStart);
+                assert offsetTagStart != -1 : getTagName();
+                coursor = offsetTagStart;
+                break;
+            case XMLStreamReader.CDATA:
+            case XMLStreamReader.COMMENT:
+            case XMLStreamReader.CHARACTERS:
+                offsetTextStart = offsetTagEnd + 1;
+                offsetTextEnd = reader.getLocation().getCharacterOffset();
+                offsetTextEnd = text.indexOf("<", offsetTextStart);
+                coursor = offsetTextStart;
+                break;
+            default:
+                break;
+            }
+            return event;
         }
 
-        private int offsetOfPrevTagEnd() {
-            return text.lastIndexOf(">", reader.getLocation().getCharacterOffset() - 1);
-        }
-
-        private int offsetOfNextElm() {
-            return reader.getLocation().getCharacterOffset();
+        private String getTagName() {
+            return reader.getPrefix().length() == 0 ? reader.getLocalName() : reader.getPrefix() + ":"
+                    + reader.getLocalName();
         }
 
         /**
@@ -190,7 +238,7 @@ public class StAXXmlParser implements XmlParser {
         private void handleStartElm() throws ParseException, XMLStreamException {
             depth.up();
             QName qname = reader.getName();
-            if (isTraceEnabled()) trace(offsetOfTagStart() + ":START:" + qname.getPrefix() + ":" + qname.getLocalPart());
+            if (isTraceEnabled()) trace(offsetTagStart + ":START:" + qname.getPrefix() + ":" + qname.getLocalPart());
             if (qname.getPrefix().equals(PrkNameSpace.PREFIX)) { // <prk:def> or
                 // <prk:replace>
                 handlePrkTag(qname);
@@ -236,11 +284,11 @@ public class StAXXmlParser implements XmlParser {
             }
             if (key != null) {
                 // ルート要素に属性が付いている場合は最初に設定したダミーのFragmentを削除しておく
-                if (offsetOfTagStart() == 0) fragments.clear();
-                fragments.addFirst(new Fragment(offsetOfTagStart(), Fragment.Type.TAG_START, key, value, attrs,
-                        prkAttrs, pathAttrs));
+                if (offsetTagStart == 0) fragments.clear();
+                fragments.addFirst(new Fragment(offsetTagStart, Fragment.Type.TAG_START, key, value, attrs, prkAttrs,
+                        pathAttrs));
                 if (isLoop || key.equals(PrkAttribute.BLOCK.name)) {
-                    fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                    fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
                 }
                 depth.nest();
                 // template baseの処理
@@ -268,21 +316,21 @@ public class StAXXmlParser implements XmlParser {
                 // TODO name, language などのリテラル
                 if (language == null) throw new ParseException("format error: language is null.");
                 if (name == null) throw new ParseException("format error: name is null.");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.DEF_START)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.DEF_START)
                         .appendPrkAttrs(attr("language", language), attr("type", type), attr("name", name)).build());
-                int defBodyOffset = reader.getLocation().getCharacterOffset() + 1;
-                event = reader.next();
+                int defBodyOffset = offsetTagEnd + 1;
+                event = next();
                 if (event != XMLStreamReader.CHARACTERS) throw new ParseException("format error: ");
                 fragments.addFirst(Fragment.create(defBodyOffset, Fragment.Type.DEF_CDATA).build());
                 while (event == XMLStreamReader.CHARACTERS) {
-                    event = reader.next();
+                    event = next();
                 }
                 if (event != XMLStreamReader.END_ELEMENT) throw new ParseException("format error: ");
                 if (!reader.getPrefix().equals("prk") || !reader.getLocalName().equals("def")) {
                     throw new ParseException("format error: ");
                 }
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.DEF_END).build());
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.DEF_END).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
             } else if (localName.equals(PrkElement.FUNCTIONS.name)) { // <prk:functions
                 String className = null;
                 String name = "";
@@ -297,19 +345,19 @@ public class StAXXmlParser implements XmlParser {
                     }
                 }
                 if (className == null) throw new ParseException("attribute must be contain 'class' in prk:functions");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.FUNCTIONS)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.FUNCTIONS)
                         .appendPrkAttrs(attr("class", className), attr("name", name)).build());
-                event = reader.next();
+                event = next();
                 if (event != XMLStreamReader.END_ELEMENT) throw new ParseException("prk:functions can't has an element");
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
             } else if (localName.equals(PrkElement.VAL.name)) { // <prk:val />
                 String name = find("name");
                 if (name == null) throw new ParseException("name is not found in prk:component");
                 String value = find("value");
                 if (value == null) throw new ParseException("value is not found in prk:component");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_EMPTY_ELEMENTS)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.TAG_EMPTY_ELEMENTS)
                         .append(PrkElement.VAL.name, name).appendAttrs(Fragment.attr("value", value)).build());
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
             } else if (localName.equals(PrkElement.COMPONENT.name)) { // <prk:component />
                 String type = find("type");
                 int attrCount = reader.getAttributeCount();
@@ -320,18 +368,18 @@ public class StAXXmlParser implements XmlParser {
                     attrs.add(Fragment.attr(key, reader.getAttributeValue(i)));
                 }
                 if (type == null) throw new ParseException("type is not found in prk:component");
-                int compTagOffset = offsetOfTagStart();
-                event = reader.next();
+                int compTagOffset = offsetTagStart;
+                event = next();
                 if (event == XMLStreamReader.END_ELEMENT) {
                     Builder frg = Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS).append(
                             PrkElement.COMPONENT.name, type);
                     fragments.addFirst(frg.appendAttrs(attrs).build());
-                    fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                    fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
                     return;
                 }
                 // <prk:param>
                 while (event != XMLStreamReader.START_ELEMENT && event != XMLStreamReader.END_ELEMENT) {
-                    event = reader.next();
+                    event = next();
                 }
                 outer: while (true) {
                     // <prk:param key="xxx" value="xxx" />
@@ -344,13 +392,13 @@ public class StAXXmlParser implements XmlParser {
                     String value = find("value");
                     if (value == null) throw new ParseException("value is not found in prk:param");
                     attrs.add(Fragment.attr(key, value));
-                    event = reader.next();
+                    event = next();
                     if (event != XMLStreamReader.END_ELEMENT) {
                         throw new ParseException("format error: ");
                     }
                     // componentの終わりか次のparamまで読み飛ばす
                     while (true) {
-                        event = reader.next();
+                        event = next();
                         if (isEndPrkComponent()) {
                             // </prk:component>
                             break outer;
@@ -362,26 +410,26 @@ public class StAXXmlParser implements XmlParser {
                 }
                 fragments.addFirst(Fragment.create(compTagOffset, Fragment.Type.TAG_EMPTY_ELEMENTS)
                         .append(PrkElement.COMPONENT.name, type).appendAttrs(attrs).build());
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
             } else if (localName.equals(PrkElement.REPLACE.name)) { // <prk:replace>
                 String value = find("value");
                 if (value == null) throw new ParseException("value is not found in prk:replace");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.TAG_START)
                         .append(PrkElement.REPLACE.name, value).build());
                 depth.nest();
             } else if (localName.equals(PrkElement.FOR.name)) { // <prk:for>
                 String value = find("loop");
                 if (value == null) throw new ParseException("loop is not found in prk:for");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_START)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.TAG_START)
                         .append(PrkElement.FOR.name, value).build());
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
                 depth.nest();
             } else if (localName.equals(PrkElement.INCLUDE.name)) { // <prk:include  file="..." >
                 String file = find("file");
                 if (file == null) throw new ParseException("file is not found in prk:include");
-                fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_EMPTY_ELEMENTS)
+                fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.TAG_EMPTY_ELEMENTS)
                         .append(PrkElement.INCLUDE.name, file).build());
-                fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
             } else {
                 throw new ParseException("Unkown Element: " + qname);
             }
@@ -408,43 +456,43 @@ public class StAXXmlParser implements XmlParser {
 
         // タグの終了イベントの処理
         private void handleEndElm() throws ParseException, XMLStreamException {
-            if (isTraceEnabled()) trace(offsetOfTagStart() + ":  END:" + reader.getName());
+            if (isTraceEnabled()) trace(offsetTagStart + ":  END:" + reader.getName());
             if (depth.isNest()) {
                 depth.down();
                 if (depth.lastValue() == 0) {
-                    fragments.addFirst(Fragment.create(offsetOfTagStart(), Fragment.Type.TAG_END).build());
-                    fragments.addFirst(Fragment.create(offsetOfNextElm(), Fragment.Type.TEXT).build());
+                    fragments.addFirst(Fragment.create(offsetTagStart, Fragment.Type.TAG_END).build());
+                    fragments.addFirst(Fragment.create(offsetTagEnd + 1, Fragment.Type.TEXT).build());
                     depth.release();
                 }
             }
         }
 
         private void handleCharsElm() throws ParseException, XMLStreamException {
-            int txtStart = Math.max(textLastOffset, offsetOfPrevTagEnd() + 1);
-            int extEnd = reader.getLocation().getCharacterOffset();
+            int textStart = Math.max(textLastOffset, offsetTagEnd + 1);
+            int textEnd = offsetTextEnd;
             String string;
-            if (extEnd < 0) {
-                string = text.substring(txtStart);
+            if (textEnd < 0) {
+                string = text.substring(textStart);
             } else {
-                string = text.substring(txtStart, extEnd);
+                string = text.substring(textStart, textEnd);
             }
-            if (isTraceEnabled()) trace(txtStart + ": TEXT:" + string);
+            if (isTraceEnabled()) trace(textStart + ": TEXT:" + string);
             if (fragments.getFirst().type == Fragment.Type.TAG_START) {
-                fragments.addFirst(Fragment.create(txtStart, Fragment.Type.TAG_BODY).build());
+                fragments.addFirst(Fragment.create(textStart, Fragment.Type.TAG_BODY).build());
             }
             Matcher matcher = expressionPattern.matcher(string);
             while (matcher.find()) {
-                textLastOffset = txtStart + matcher.end();
+                textLastOffset = textStart + matcher.end();
                 int start = matcher.start();
-                if (StAXXmlParser.this.text.charAt(txtStart + start - 1) == '$') { // Escape
+                if (StAXXmlParser.this.text.charAt(textStart + start - 1) == '$') { // Escape
                     // Character
-                    fragments.addFirst(Fragment.create(txtStart + start - 1, Fragment.Type.ESCAPE).build());
-                    fragments.addFirst(Fragment.create(txtStart + start + 1, Fragment.Type.TEXT).build());
+                    fragments.addFirst(Fragment.create(textStart + start - 1, Fragment.Type.ESCAPE).build());
+                    fragments.addFirst(Fragment.create(textStart + start + 1, Fragment.Type.TEXT).build());
                     continue;
                 }
                 // TODO 不正な式言語フォーマット検知
-                fragments.addFirst(Fragment.create(txtStart + start, Fragment.Type.EXPRESSION).build());
-                fragments.addFirst(Fragment.create(txtStart + matcher.end(), Fragment.Type.TEXT).build());
+                fragments.addFirst(Fragment.create(textStart + start, Fragment.Type.EXPRESSION).build());
+                fragments.addFirst(Fragment.create(textStart + matcher.end(), Fragment.Type.TEXT).build());
             }
         }
     }

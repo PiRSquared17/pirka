@@ -4,6 +4,7 @@ import static org.pirkaengine.core.util.Logger.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 
 import org.pirkaengine.core.parser.ParseException;
 import org.pirkaengine.core.serialize.CacheManager;
@@ -23,8 +24,6 @@ public class PirkaLoader {
     final PirkaContext context;
     /** CacheManager */
     final CacheManager cacheManager;
-    /** charset */
-    volatile String charset = "UTF-8";
 
     private static volatile Factory FACTORY = new Factory() {
         /*
@@ -107,14 +106,18 @@ public class PirkaLoader {
      * @throws PirkaLoadException キャッシュ処理に失敗した場合 TODO どうする？
      */
     public Template load(String templateFileName) throws ParseException, PirkaLoadException, TemplateNotFoundException {
+        return load(templateFileName, PirkaContext.getInstance().getCharset());
+    }
+    
+    public Template load(String templateFileName, Charset charset) throws ParseException, PirkaLoadException, TemplateNotFoundException {
         if (templateFileName == null) throw new IllegalArgumentException("templateFileName is null.");
         if (isDebugEnabled()) debug("load: " + templateFileName);
         File file = toFile(templateFileName);
         try {
-            if (!this.context.isEnableCache()) return build(templateFileName, file);
+            if (!this.context.isEnableCache()) return build(templateFileName, file, charset);
             Template template = cacheManager.deserialize(templateFileName);
             if (template != null && template.getTimeStamp() == file.lastModified()) return template;
-            template = build(templateFileName, file);
+            template = build(templateFileName, file, charset);
             cacheManager.serialize(template);
             return template;
         } catch (ParseException e) {
@@ -155,29 +158,13 @@ public class PirkaLoader {
         return new File(context.getTemplatePath() + baseTemplateName.substring(0, idx + 1) + templateName);
     }
     
-    private Template build(String templateFileName, File file) throws ParseException, PirkaLoadException, TemplateNotFoundException,
+    private Template build(String templateFileName, File file, Charset charset) throws ParseException, PirkaLoadException, TemplateNotFoundException,
             FileNotFoundException {
         if (isDebugEnabled()) debug("build: " + file.getAbsolutePath());
         if (!file.exists()) throw new TemplateNotFoundException("Not Found template: " + file.getAbsolutePath());
         TemplateBuilder builder = new TemplateBuilder(this);
-        Template template = builder.build(templateFileName, file);
+        Template template = builder.build(templateFileName, file, charset);
         return template;
-    }
-    
-    /**
-     * 文字コードを取得する
-     * @param charset 文字コード
-     */
-    public void setCharset(String charset) {
-        this.charset = charset;
-    }
-    
-    /**
-     * 文字コードを取得する
-     * @return 文字コード
-     */
-    public String getCharset() {
-        return this.charset;
     }
 
     /**

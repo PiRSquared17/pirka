@@ -12,7 +12,6 @@ public final class Logger {
     static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = java.util.logging.Logger.getLogger("org.pirkaengine.core");
-//        LOGGER.setLevel(Level.FINE);
     }
 
     /**

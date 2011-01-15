@@ -5,8 +5,7 @@ import static org.pirkaengine.core.util.Logger.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -21,7 +20,6 @@ import org.pirkaengine.core.parser.Fragment;
 import org.pirkaengine.core.parser.ParseException;
 import org.pirkaengine.core.parser.StAXXmlParser;
 import org.pirkaengine.core.parser.XhtmlStruct;
-import org.pirkaengine.core.parser.XmlParser;
 
 /**
  * テンプレートビルダ.
@@ -61,23 +59,49 @@ public class TemplateBuilder {
      * @throws ParseException 
      */
     public XhtmlTemplate build(String templateName, File file) throws ParseException, FileNotFoundException {
+        return build(templateName, file, "UTF-8");
+    }
+
+    /**
+     * テンプレートをビルドする.
+     * @param templateName テンプレート名
+     * @param file File
+     * @return テンプレートオブジェクト
+     * @throws FileNotFoundException 
+     * @throws ParseException 
+     */
+    public XhtmlTemplate build(String templateName, File file, String charset) throws ParseException,
+            FileNotFoundException {
+        return build(templateName, file, Charset.forName(charset));
+    }
+
+    /**
+     * テンプレートをビルドする.
+     * @param templateName テンプレート名
+     * @param file File
+     * @return テンプレートオブジェクト
+     * @throws FileNotFoundException 
+     * @throws ParseException 
+     */
+    public XhtmlTemplate build(String templateName, File file, Charset charset) throws ParseException,
+            FileNotFoundException {
         if (file == null) throw new IllegalArgumentException("file is null.");
         if (isDebugEnabled()) debug("build: " + file.getAbsolutePath());
         XhtmlTemplate template = new XhtmlTemplate(templateName);
         template.setTimeStamp(file.lastModified());
-        XhtmlStruct struct = parse(file);
+        XhtmlStruct struct = parse(file, charset);
         // extendsの処理
         if (struct.getBaseTemplate() != null) {
             try {
                 // 継承テンプレート
                 // block部分を抽出する（this.blocksに格納される）
                 XhtmlTemplate subTemplate = new XhtmlTemplate(templateName);
-                buildTemplate(subTemplate, struct, null);
+                buildTemplate(subTemplate, struct, null, charset);
                 // TODO 相対パスの解決
                 File baseFile = loader.toFile(struct.getBaseTemplate(), templateName);
                 // ベースのテンプレート
-                XhtmlStruct baseStruct = parse(baseFile);
-                buildTemplate(template, baseStruct, blocks);
+                XhtmlStruct baseStruct = parse(baseFile, charset);
+                buildTemplate(template, baseStruct, blocks, charset);
                 template.components.addAll(subTemplate.components);
                 for (String name : subTemplate.functions.keySet()) {
                     template.functions.put(name, subTemplate.functions.get(name));
@@ -87,21 +111,17 @@ public class TemplateBuilder {
                 throw new ParseException(e);
             }
         } else {
-            buildTemplate(template, struct, null);
+            buildTemplate(template, struct, null, charset);
             return template;
         }
     }
 
-    private XhtmlStruct parse(File file) throws ParseException, FileNotFoundException {
-        try {
-            XmlParser parser = new StAXXmlParser();
-            return parser.parse(new InputStreamReader(new FileInputStream(file), loader.getCharset()));
-        } catch (UnsupportedEncodingException e) {
-            throw new ParseException(e);
-        }
+    private XhtmlStruct parse(File file, Charset charset) throws ParseException, FileNotFoundException {
+        return new StAXXmlParser().parse(new FileInputStream(file), charset);
     }
 
-    void buildTemplate(XhtmlTemplate template, XhtmlStruct struct, Map<String, BlockNode> blockNodes) throws ParseException {
+    void buildTemplate(XhtmlTemplate template, XhtmlStruct struct, Map<String, BlockNode> blockNodes, Charset charset)
+            throws ParseException {
         StringBuilder text = struct.getText();
         ListIterator<Fragment> iter = struct.getFragments().listIterator();
         assert iter.hasNext();
@@ -117,7 +137,7 @@ public class TemplateBuilder {
                 text.delete(fragment.offset, text.length());
                 continue;
             }
-            Node node = toNode(template, text, fragment, iter, blockNodes);
+            Node node = toNode(template, text, fragment, iter, blockNodes, charset);
             if (isDebugEnabled()) debug(node);
             if (node instanceof ScriptNode) {
                 template.addScript((ScriptNode) node);
@@ -131,18 +151,14 @@ public class TemplateBuilder {
 
     // FragmentをNodeに変換する
     Node toNode(XhtmlTemplate template, StringBuilder text, Fragment fragment, ListIterator<Fragment> iter,
-            Map<String, BlockNode> replaces) throws ParseException {
+            Map<String, BlockNode> replaces, Charset charset) throws ParseException {
         String str = text.substring(fragment.offset);
         text.delete(fragment.offset, text.length());
         switch (fragment.type) {
         case TEXT:
             // Fragmentsは逆順、先頭要素のみ処理
             if (iter.hasPrevious()) {
-                if (template.getName().endsWith("xml")) { // xmls:prkを削除
-                    str = str.replaceAll("xmlns:prk=\\\".+\\\"", "");
-                } else { // xmlsを削除
-                    str = str.replaceAll("xmlns(:.+)?=\\\".+\\\"", "");
-                }
+                str = str.replaceAll("xmlns:prk=\\\".+\\\"", "");
             }
             return new TextNode(str);
         case EXPRESSION:
@@ -169,7 +185,7 @@ public class TemplateBuilder {
                 if (!iter.hasNext()) throw new TemplateBuildFailedException("format error"); // TODO
                 // message
                 Fragment nextFrag = iter.next();
-                nextNode = this.toNode(template, text, nextFrag, iter, replaces); // 再帰
+                nextNode = this.toNode(template, text, nextFrag, iter, replaces, charset); // 再帰
                 if (nextNode instanceof StartTagNode) break; // 再帰終了
                 nodes.addFirst(nextNode);
             }
@@ -202,8 +218,8 @@ public class TemplateBuilder {
                 try {
                     XhtmlTemplate includeTemplate = new XhtmlTemplate(fragment.prkValue);
                     File includeFile = loader.toFile(fragment.prkValue, template.templateName);
-                    XhtmlStruct includeStruct = parse(includeFile);
-                    buildTemplate(includeTemplate, includeStruct, null);
+                    XhtmlStruct includeStruct = parse(includeFile, charset);
+                    buildTemplate(includeTemplate, includeStruct, null, charset);
                     // IncludeNode node = new IncludeNode(includeTemplate);
                     // template.stack(node);
                     template.components.addAll(includeTemplate.components);
