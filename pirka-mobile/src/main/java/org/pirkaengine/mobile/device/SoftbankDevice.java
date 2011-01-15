@@ -11,7 +11,7 @@ public class SoftbankDevice extends Device {
     final HttpServletRequest request;
 
     public SoftbankDevice(HttpServletRequest request) {
-        super(Carrier.SOFTBANK, MobileCharset.forSoftbank());
+        super(Carrier.SOFTBANK, MobileCharset.forSoftbank(), "Shift_JIS");
         this.request = request;
     }
 

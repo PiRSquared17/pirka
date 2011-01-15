@@ -11,7 +11,7 @@ public class KDDIDevice extends Device {
     final HttpServletRequest request;
 
     public KDDIDevice(HttpServletRequest request) {
-        super(Carrier.KDDI, MobileCharset.forKddi());
+        super(Carrier.KDDI, MobileCharset.forKddi(), "Shift_JIS");
         this.request = request;
     }
 

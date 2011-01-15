@@ -11,7 +11,7 @@ public class DocomoDevice extends Device {
     final HttpServletRequest request;
 
     public DocomoDevice(HttpServletRequest request) {
-        super(Carrier.DOCOMO, MobileCharset.forDocomo());
+        super(Carrier.DOCOMO, MobileCharset.forDocomo(), "Shift_JIS");
         this.request = request;
     }
 

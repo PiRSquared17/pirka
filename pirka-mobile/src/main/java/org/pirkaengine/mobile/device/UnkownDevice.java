@@ -8,7 +8,7 @@ import org.pirkaengine.mobile.Device;
 public class UnkownDevice extends Device {
 
     public UnkownDevice() {
-        super(Carrier.UNKOWN, Charset.defaultCharset());
+        super(Carrier.UNKOWN, Charset.defaultCharset(), Charset.defaultCharset().name());
     }
 
     /*
