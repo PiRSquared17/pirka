@@ -2,6 +2,8 @@ package org.pirkaengine.core;
 
 import static org.pirkaengine.core.TestUtil.*;
 
+import java.nio.charset.Charset;
+
 import org.junit.Test;
 import org.pirkaengine.core.parser.ParseException;
 
@@ -19,9 +21,8 @@ public class RenderTest_Shift_JIS extends RenderTest {
      */
     @Test
     public void render() throws ParseException, PirkaLoadException, TemplateNotFoundException  {
-        loader.setCharset("MS932");
         String templateName = "SJIS";
-        Template tmpl = loader.load(getTemplateFileName(templateName));
+        Template tmpl = loader.load(getTemplateFileName(templateName), Charset.forName("Windows-31J"));
         viewModel.put("text", "文字コード");
         String actual = tmpl.generate(viewModel).render();
         assertRenderEquals(templateName, actual, "html", "MS932");

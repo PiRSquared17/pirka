@@ -3,7 +3,10 @@ package org.pirkaengine.core.parser;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,9 +30,19 @@ public class StAXXmlParserTest {
     }
 
     @Test
-    public void parse_Simple() throws ParseException {
+    public void parse_Text() throws ParseException {
         String text = "<xhtml><body>Text テキスト</body></xhtml>";
         XhtmlStruct actual = target.parse(getInput(text));
+        assertThat(actual.getFragments(), is(expected(Fragment.create(0, Fragment.Type.TEXT).build())));
+        assertThat(actual.getText().toString(), is(text));
+    }
+
+    @Test
+    public void parse_Text_ShiftJIS() throws ParseException, UnsupportedEncodingException {
+        Charset charset = Charset.forName("Windows-31J");
+        String text = "<xhtml><body>Text テキスト</body></xhtml>";
+        ByteArrayInputStream input = new ByteArrayInputStream(text.getBytes(charset));
+        XhtmlStruct actual = target.parse(input, charset);
         assertThat(actual.getFragments(), is(expected(Fragment.create(0, Fragment.Type.TEXT).build())));
         assertThat(actual.getText().toString(), is(text));
     }
@@ -47,7 +60,7 @@ public class StAXXmlParserTest {
     }
 
     @Test
-    public void parse_Expression_テキスト混在() throws ParseException {
+    public void parse_Expression_mix() throws ParseException {
         String text = "<xhtml><body>xxx<a>${hoge}</a></body></xhtml>";
         XhtmlStruct actual = target.parse(getInput(text));
         assertThat(
@@ -59,7 +72,7 @@ public class StAXXmlParserTest {
     }
 
     @Test
-    public void parse_Expression_テキスト混在2() throws ParseException {
+    public void parse_Expression_mix2() throws ParseException {
         String text = "<xhtml><body>\r\n01234<a href=\"aa\">aaa</a>${hoge}</body></xhtml>";
         XhtmlStruct actual = target.parse(getInput(text));
         assertThat(
@@ -71,7 +84,7 @@ public class StAXXmlParserTest {
     }
 
     @Test
-    public void parse_Expression_テキスト混在3() throws ParseException {
+    public void parse_Expression_mix3() throws ParseException {
         String text = "<xhtml><body>\r\n${hoge}<a>aaa</a>ccc</body></xhtml>";
         XhtmlStruct actual = target.parse(getInput(text));
         assertThat(
@@ -569,7 +582,7 @@ public class StAXXmlParserTest {
                                 .build(), Fragment.create(0, Fragment.Type.TEXT).build())));
         assertThat(actual.getText().toString(), is(text));
     }
-    
+
     @Test
     public void parse_prk_val() throws ParseException {
         String text = "<html xmlns:prk=\"http://www.pirkaengine.org\"><prk:val name=\"foo\" value=\"xxx\" /></html>";
@@ -577,11 +590,9 @@ public class StAXXmlParserTest {
         assertThat(
                 actual.getFragments(),
                 is(expected(Fragment.create(79, Fragment.Type.TEXT).build(),
-                        Fragment.create(45, Fragment.Type.TAG_EMPTY_ELEMENTS)
-                                .append(PrkElement.VAL.name, "foo")
-                                .appendAttrs(Fragment.attr("value", "xxx"))
-                                .build(), Fragment
-                                .create(0, Fragment.Type.TEXT).build())));
+                        Fragment.create(45, Fragment.Type.TAG_EMPTY_ELEMENTS).append(PrkElement.VAL.name, "foo")
+                                .appendAttrs(Fragment.attr("value", "xxx")).build(),
+                        Fragment.create(0, Fragment.Type.TEXT).build())));
         assertThat(actual.getText().toString(), is(text));
     }
 
@@ -596,7 +607,22 @@ public class StAXXmlParserTest {
         String text = "<html xmlns:prk=\"http://www.pirkaengine.org\"><prk:val name=\"foo\" /></html>";
         target.parse(getInput(text));
     }
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void parse_null() throws ParseException {
+        target.parse(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void parse_null_reader() throws ParseException {
+        target.parse(null, Charset.forName("Windows-31J"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void parse_null_charset() throws ParseException {
+        target.parse(new ByteArrayInputStream(new byte[0]), null);
+    }
+
     private StringReader getInput(String text) {
         return new StringReader(text);
     }
