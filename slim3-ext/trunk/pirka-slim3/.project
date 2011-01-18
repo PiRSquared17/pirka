@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>pirka-slim3</name>
-	<comment></comment>
+	<comment>Adapter using &quot;PirkaEngine&quot; on Google App Engine/Java using slim3 / Scenic3.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -16,12 +16,12 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.google.appengine.eclipse.core.projectValidator</name>
+			<name>com.google.appengine.eclipse.core.enhancerbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.google.appengine.eclipse.core.enhancerbuilder</name>
+			<name>com.google.appengine.eclipse.core.projectValidator</name>
 			<arguments>
 			</arguments>
 		</buildCommand>

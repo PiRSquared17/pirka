@@ -1,6 +1,7 @@
 package org.pirkaengine.slim3;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -39,25 +40,55 @@ public class PirkaRenderer {
     /** The logger. */
     private static final Logger logger = Logger.getLogger(PirkaRenderer.class.getName());
 
+    /**
+     * 指定したテンプレートでレンダリングを行う
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @param templateName テンプレート
+     * @return null
+     * @throws IOException
+     * @throws RenderException
+     * @throws ParseException
+     * @throws PirkaLoadException
+     * @throws TemplateNotFoundException
+     */
     public static Navigation render(HttpServletRequest req, HttpServletResponse resp, String templateName)
             throws IOException, RenderException, ParseException, PirkaLoadException, TemplateNotFoundException {
         return render(req, resp, templateName, new HashMap<String, Object>());
     }
 
+    /**
+     * ViewModelとテンプレートを指定して、レンダリングを行う
+     * @param req HttpServletRequest
+     * @param resp HttpServletResponse
+     * @param templateName テンプレート
+     * @param viewModel ビューモデル
+     * @return null
+     * @throws IOException
+     * @throws RenderException
+     * @throws ParseException
+     * @throws PirkaLoadException
+     * @throws TemplateNotFoundException
+     */
     public static Navigation render(HttpServletRequest req, HttpServletResponse resp, String templateName,
             Map<String, Object> viewModel) throws IOException, RenderException, ParseException, PirkaLoadException,
             TemplateNotFoundException {
+        String encoding = req.getCharacterEncoding();
+        setUpResponse(resp, viewModel, "text/html", encoding);
+        return render(req, resp, templateName, viewModel, Charset.forName(encoding));
+    }
+
+    public static Navigation render(HttpServletRequest req, HttpServletResponse resp, String templateName,
+            Map<String, Object> viewModel, Charset charset) throws IOException, RenderException, ParseException,
+            PirkaLoadException, TemplateNotFoundException {
         if (resp == null) throw new IllegalArgumentException("resp == null");
         if (templateName == null) throw new IllegalArgumentException("templateName == null");
         if (viewModel == null) throw new IllegalArgumentException("viewModel == null");
+        if (charset == null) throw new IllegalArgumentException("charset == null");
         long start = System.currentTimeMillis();
         try {
             Template template = PirkaLoader.newInstance().load(templateName);
-            resp.setCharacterEncoding(req.getCharacterEncoding());
-            String contextType = "text/html; charset=" + resp.getCharacterEncoding();
-            resp.setContentType(contextType);
-            viewModel.put("contextType", contextType);
-            template.generate(viewModel).render(resp.getOutputStream(), resp.getCharacterEncoding());
+            template.generate(viewModel).render(resp.getOutputStream(), charset);
             resp.flushBuffer();
             return null;
         } finally {
@@ -65,4 +96,12 @@ public class PirkaRenderer {
                     + (System.currentTimeMillis() - start) + "[msec]");
         }
     }
+
+    static void setUpResponse(HttpServletResponse resp, Map<String, Object> viewModel, String content, String encoding) {
+        String contentType = content + "; charset=" + encoding;
+        viewModel.put("contentType", contentType);
+        resp.setCharacterEncoding(encoding);
+        resp.setContentType(contentType);
+    }
+
 }

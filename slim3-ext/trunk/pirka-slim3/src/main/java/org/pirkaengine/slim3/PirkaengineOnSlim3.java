@@ -1,5 +1,7 @@
 package org.pirkaengine.slim3;
 
+import java.nio.charset.Charset;
+
 import org.pirkaengine.core.PirkaContext;
 import org.pirkaengine.core.PirkaLoader;
 import org.pirkaengine.slim3.internal.DatastorePirkaLoaderFactory;
@@ -28,11 +30,16 @@ import org.pirkaengine.slim3.internal.MemcachePirkaLoaderFactory;
  */
 public abstract class PirkaengineOnSlim3 extends PirkaLoader {
 
-    public static final String KEY_CACHE_MODE = "org.pirkaengine.cache.mode";
+    /** Key of cache mode. */
+    public static final String KEY_CACHE_MODE = "org.pirkaengine.cache";
     /** Memcache mode (Default) */
     public static final String KEY_CACHE_MODE_MEMCACHE = "memcache";
     /** Datastore mode */
     public static final String KEY_CACHE_MODE_DATASTORE = "datastore";
+    /** Key of template file charset */
+    public static final String KEY_CHARSET = "org.pirkaengine.charset";
+    /** Default charset */
+    public static final String DEFAULT_CHARSET = "utf-8";
 
     /**
      * PirkaEngineのデフォルト設定を行う
@@ -48,5 +55,7 @@ public abstract class PirkaengineOnSlim3 extends PirkaLoader {
         } else {
             PirkaLoader.setFactory(new DatastorePirkaLoaderFactory());
         }
+        String charset = System.getProperty(KEY_CHARSET, DEFAULT_CHARSET);
+        ctx.setCharset(Charset.forName(charset));
     }
 }

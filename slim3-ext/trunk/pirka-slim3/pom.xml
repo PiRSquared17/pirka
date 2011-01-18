@@ -2,11 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <properties>
-    <app.version>0.1.0</app.version>
-    <pirka.version>0.2.0</pirka.version>
-    <scenic3.version>0.3.0</scenic3.version>
+    <app.version>0.2.0-SNAPSHOT</app.version>
+    <pirka.version>0.3.0-SNAPSHOT</pirka.version>
+    <scenic3.version>0.4.0-SNAPSHOT</scenic3.version>
     <slim3.version>1.0.6</slim3.version>
-    <appengine.version>1.4.0</appengine.version>
   </properties>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pirkaengine</groupId>
@@ -192,6 +191,14 @@
       <groupId>org.slim3</groupId>
       <artifactId>slim3</artifactId>
       <version>${slim3.version}</version>
+      <!-- 
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.appengine</groupId>
+          <artifactId>appengine-api-1.0-sdk</artifactId>
+        </exclusion>
+      </exclusions>
+       -->
     </dependency>
     <!-- pirka engine -->
     <dependency>
@@ -199,43 +206,17 @@
       <artifactId>pirka</artifactId>
       <version>${pirka.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.pirkaengine</groupId>
+      <artifactId>pirka-mobile</artifactId>
+      <version>${pirka.version}</version>
+    </dependency>
     <!-- scenic3 (optional) -->
     <dependency>
       <groupId>scenic3</groupId>
       <artifactId>scenic3</artifactId>
       <version>${scenic3.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- AppEngine SDK -->
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>${appengine.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-labs</artifactId>
-      <version>${appengine.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-local-runtime</artifactId>
-      <version>${appengine.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-stubs</artifactId>
-      <version>${appengine.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-testing</artifactId>
-      <version>${appengine.version}</version>
-      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <!-- Servlet API -->
     <dependency>
