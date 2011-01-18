@@ -174,11 +174,11 @@ public class StAXXmlParser implements XmlParser {
             case XMLStreamReader.END_ELEMENT:
                 handleEndElm();
                 break;
+            case XMLStreamReader.CDATA:
+            case XMLStreamReader.COMMENT:
             case XMLStreamReader.CHARACTERS:
                 handleCharsElm();
                 break;
-            case XMLStreamReader.CDATA:
-            case XMLStreamReader.COMMENT:
             case XMLStreamReader.END_DOCUMENT:
                 // 空のテキストノード等が含まれている場合に削除
                 if (fragments.getFirst().offset == StAXXmlParser.this.text.length()) {
