@@ -3,7 +3,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <properties>
     <app.version>0.3.0-SNAPSHOT</app.version>
-    <t2.version>0.6.3-ga</t2.version>
   </properties>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pirkaengine</groupId>
@@ -129,11 +128,6 @@
       <id>javanet</id>
       <name>java.net Repository</name>
       <url>http://download.java.net/maven/2</url>
-    </repository>
-    <repository>
-      <id>maven.t2framework.org</id>
-      <name>The T2 Project Maven2 Repository</name>
-      <url>http://maven.t2framework.org/maven2</url>
     </repository>
   </repositories>
   <dependencies>
