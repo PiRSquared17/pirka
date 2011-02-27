@@ -1,0 +1,6 @@
+# 1.Name
+# 2.Text
+FOGGY 霧
+CITYSCAPE_AT_DUSK 夕焼け
+RAINBOW 虹
+SNOWFLAKE 雪結晶
