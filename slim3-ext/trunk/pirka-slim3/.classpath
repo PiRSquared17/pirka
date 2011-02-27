@@ -6,10 +6,10 @@
 	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/pirkaengine/pirka/0.3.0-SNAPSHOT/pirka-0.3.0-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/pirkaengine/pirka-mobile/0.3.0-SNAPSHOT/pirka-mobile-0.3.0-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/scenic3/scenic3/0.4.0-SNAPSHOT/scenic3-0.4.0-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/slim3/slim3/1.0.6/slim3-1.0.6.jar" sourcepath="M2_REPO/org/slim3/slim3/1.0.6/slim3-1.0.6-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/pirkaengine/pirka/0.3.0/pirka-0.3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/pirkaengine/pirka-mobile/0.3.0/pirka-mobile-0.3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/scenic3/scenic3/0.4.0/scenic3-0.4.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/slim3/slim3/1.0.7/slim3-1.0.7.jar" sourcepath="M2_REPO/org/slim3/slim3/1.0.7/slim3-1.0.7-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>

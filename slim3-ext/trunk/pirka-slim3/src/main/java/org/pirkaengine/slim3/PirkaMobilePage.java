@@ -24,11 +24,11 @@ public abstract class PirkaMobilePage extends PirkaPage {
      * @see scenic3.ScenicPage#setUp()
      */
     @Override
-    protected void setUp() {
+    protected Navigation setUp() {
         device = Device.lookup(request);
         assert device != null;
         viewModel("emoji", new EmojiMap());
-        super.setUp();
+        return super.setUp();
     }
 
     /**
