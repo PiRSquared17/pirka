@@ -1,0 +1,22 @@
+<html xmlns:prk="http://www.pirkaengine.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>関数定義のテスト</title>
+</head>
+<body>
+  <p>スコア:<span prk:for="score in scores">${score},</span></p>
+  <p>平均スコア：${average(scores)}</p>
+</body>
+<prk:def language="javascript" type="function" name="average(scores)">
+<![CDATA[
+function average(scores) {
+  var len = scores.length;
+  var total = 0;
+  for(var i = 0; i < len; i++) {
+    total += parseInt(scores[i]);
+  }
+  return total / len;
+}
+]]>
+</prk:def>
+</html>
