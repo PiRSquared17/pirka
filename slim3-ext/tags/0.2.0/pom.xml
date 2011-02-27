@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <properties>
+    <app.version>0.2.0</app.version>
+    <pirka.version>0.3.0</pirka.version>
+    <scenic3.version>0.4.0</scenic3.version>
+    <slim3.version>1.0.7</slim3.version>
+  </properties>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.pirkaengine</groupId>
+  <artifactId>pirka-slim3</artifactId>
+  <version>${app.version}</version>
+  <packaging>jar</packaging>
+  <name>Pirkaengine slim3 adapter</name>
+  <description>Adapter using "PirkaEngine" on Google App Engine/Java using slim3 / Scenic3.</description>
+  <url>http://pirkaengine.org/</url>
+  <inceptionYear>2010</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization />
+  <developers />
+  <contributors />
+  <issueManagement>
+    <system>Goole Code</system>
+    <url><![CDATA[http://code.google.com/p/pirka/issues/list]]></url>
+  </issueManagement>
+  <mailingLists />
+  <scm>
+    <connection>scm:svn:https://pirka.googlecode.com/svn/</connection>
+    <developerConnection>scm:svn:https://pirka.googlecode.com/svn/</developerConnection>
+    <url>http://code.google.com/p/pirka/source/browse#svn/trunk</url>
+  </scm>
+  <repositories>
+    <repository>
+      <id>maven.seasar.org</id>
+      <name>The Seasar Foundation Maven2 Repository</name>
+      <url>http://maven.seasar.org/maven2</url>
+    </repository>
+    <repository>
+      <id>maven2-repository.dev.java.net</id>
+      <name>Java.net Repository for Maven</name>
+      <url>http://download.java.net/maven/2/</url>
+    </repository>
+    <repository>
+      <id>maven.deathmarch.jp</id>
+      <name>The Deathmarch Maven2 Repository</name>
+      <url>http://maven.deathmarch.jp/maven2</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <pluginManagement>
+      <plugins>
+      </plugins>
+    </pluginManagement>
+    <!-- plugins -->
+    <plugins>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>source-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <includes>
+            <include>**/*Test.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <docencoding>UTF-8</docencoding>
+          <charset>UTF-8</charset>
+          <aggregate>true</aggregate>
+          <locale>ja</locale>
+          <links>
+            <link>http://java.sun.com/javaee/5/docs/api/</link>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
+            <link>http://code.google.com/appengine/docs/java/javadoc/</link>
+            <link>http://junit.org/junit/javadoc/4.5/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>site</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <!-- Report -->
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>summary</report>
+              <report>scm</report>
+              <report>issue-tracking</report>
+              <!-- <report>dependencies</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <!-- JavaDoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <encoding>UTF-8</encoding>
+          <docencoding>UTF-8</docencoding>
+          <charset>UTF-8</charset>
+          <links>
+            <link>http://java.sun.com/javase/ja/6/docs/ja/api/</link>
+          </links>
+        </configuration>
+      </plugin>
+      <!-- FindBugs -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <configuration>
+          <findbugsXmlOutput>true</findbugsXmlOutput>
+          <xmlOutput>true</xmlOutput>
+          <threshold>Default</threshold>
+          <effort>Default</effort>
+          <excludeFilterFile>findbugs_filter.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+  <dependencies>
+    <!-- slim3 -->
+    <dependency>
+      <groupId>org.slim3</groupId>
+      <artifactId>slim3</artifactId>
+      <version>${slim3.version}</version>
+      <!-- 
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.appengine</groupId>
+          <artifactId>appengine-api-1.0-sdk</artifactId>
+        </exclusion>
+      </exclusions>
+       -->
+    </dependency>
+    <!-- pirka engine -->
+    <dependency>
+      <groupId>org.pirkaengine</groupId>
+      <artifactId>pirka</artifactId>
+      <version>${pirka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pirkaengine</groupId>
+      <artifactId>pirka-mobile</artifactId>
+      <version>${pirka.version}</version>
+    </dependency>
+    <!-- scenic3 (optional) -->
+    <dependency>
+      <groupId>scenic3</groupId>
+      <artifactId>scenic3</artifactId>
+      <version>${scenic3.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <!-- Servlet API -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
